@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableComponent } from './table.component';
 import { NzTableModule } from 'ng-zorro-antd';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { NzTableModule } from 'ng-zorro-antd';
   ],
   imports: [
     CommonModule,
-    NzTableModule
+    NzTableModule,
+    RouterModule,
   ],
   exports: [
     TableComponent

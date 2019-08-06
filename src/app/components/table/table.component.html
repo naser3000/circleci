@@ -23,17 +23,26 @@
     <tr *ngFor="let data of filterTable.data">
       <td
         nzShowCheckbox
-        [(nzChecked)]="mapOfCheckedId[data.id]"
+        [(nzChecked)]="mapOfCheckedId[data?.id]"
         (nzCheckedChange)="refreshStatus()"
       ></td>
       <ng-container *ngFor="let head of tableHeaderData | keyvalue: returnZero">
-        <td *ngIf="!timeFieldKeys.includes(head.key)">
-          {{ data[head.key] }}
+        <td *ngIf="linkFieldKeys.includes(head.key)">
+          <a [routerLink]="data?.id">
+            {{ data[head.key] }}
+          </a>
         </td>
         <td *ngIf="timeFieldKeys.includes(head.key)">
           {{ data[head.key] | date: 'yyyy/MM/dd' }}
         </td>
+        <td *ngIf="!timeFieldKeys.includes(head.key) && !linkFieldKeys.includes(head.key)">
+          {{ data[head.key] }}
+        </td>
       </ng-container>
+      <!-- <ng-container *ngFor="let head of tableHeaderData | keyvalue: returnZero">
+        <ng-container [ngTemplateOutlet]="cellTemplates" [ngTemplateOutletContext]="{$implicit: data}" >
+        </ng-container>
+      </ng-container> -->
     </tr>
   </tbody>
 </nz-table>

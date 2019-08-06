@@ -1,0 +1,17 @@
+<div>
+  <h3>Project Mangers</h3>
+  <app-table
+    [getTableRowData]="managersList"
+    [tableHeaderData]="managerFields">
+  </app-table>
+  <h3>Project Annotators</h3>
+  <app-table
+    [getTableRowData]="anotatorsList"
+    [tableHeaderData]="anotatorFields">
+  </app-table>
+  <h3>Project Files</h3>
+  <app-table
+    [getTableRowData]="filesList"
+    [tableHeaderData]="fileFields">
+  </app-table>
+</div>

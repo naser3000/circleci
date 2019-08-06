@@ -1,4 +1,31 @@
 <app-table
   [getTableRowData]="projectsList"
   [tableHeaderData]="tableHeaderData">
+  <!-- <ng-template let-data #name>
+    <td>
+        <a [routerLink]="data?.id">
+          {{ data?.name}}
+        </a>
+    </td>
+  </ng-template>
+  <ng-template let-data #group>
+    <td>
+        {{ data?.group}}
+    </td>
+  </ng-template>
+  <ng-template let-data #description>
+    <td>
+        {{ data?.description}}
+    </td>
+  </ng-template>
+  <ng-template let-data #instruction>
+    <td>
+        {{ data?.instruction}}
+    </td>
+  </ng-template>
+  <ng-template let-data #deadline>
+    <td>
+        {{ data?.deadline | date: 'yyyy/MM/dd' }}
+    </td>
+  </ng-template> -->
 </app-table>

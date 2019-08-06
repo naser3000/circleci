@@ -10,7 +10,7 @@ export class ProjectsComponent implements OnInit {
   constructor() { }
 
   tableHeaderData: any = {
-    name: 'Name',
+    projectName: 'Project Name',
     group: 'Group',
     description: 'Description',
     instruction: 'Instruction',
@@ -20,7 +20,7 @@ export class ProjectsComponent implements OnInit {
   projectsList: Array<any> = [
     {
       id: '1',
-      name: 'John Brown',
+      projectName: 'John Brown',
       group: 'group 1',
       description: 'Description',
       instruction: 'Instruction',
@@ -28,7 +28,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '2',
-      name: 'Jim Green',
+      projectName: 'Jim Green',
       group: 'group 2',
       description: 'Description',
       instruction: 'Instruction',
@@ -36,7 +36,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '3',
-      name: 'Joe Black',
+      projectName: 'Joe Black',
       group: 'group 3',
       description: 'Description',
       instruction: 'Instruction',
@@ -44,7 +44,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '4',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 4',
       description: 'Description',
       instruction: 'Instruction',
@@ -52,7 +52,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '5',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 5',
       description: 'Description',
       instruction: 'Instruction',
@@ -60,7 +60,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '6',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 6',
       description: 'Description',
       instruction: 'Instruction',
@@ -68,7 +68,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '7',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 7',
       description: 'Description',
       instruction: 'Instruction',
@@ -76,7 +76,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '8',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 8',
       description: 'Description',
       instruction: 'Instruction',
@@ -84,7 +84,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '9',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 9',
       description: 'Description',
       instruction: 'Instruction',
@@ -92,7 +92,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '10',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 10',
       description: 'Description',
       instruction: 'Instruction',
@@ -100,7 +100,7 @@ export class ProjectsComponent implements OnInit {
     },
     {
       id: '11',
-      name: 'Jim Red',
+      projectName: 'Jim Red',
       group: 'group 11',
       description: 'Description',
       instruction: 'Instruction',

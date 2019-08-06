@@ -1,11 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, ElementRef, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { NgForOfContext } from '@angular/common';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
   nzPageSize = 5;
   nzPageSizeOptions = [5, 10, 20, 30, 40, 50, 100];
 
@@ -25,6 +26,8 @@ export class TableComponent {
   listOfDisplayData: Array<any> = [];
   mapOfCheckedId: { [key: string]: boolean } = {};
   timeFieldKeys = ['deadline', 'created_at'];
+  linkFieldKeys = ['projectName'];
+  @ContentChild(TemplateRef) cellTemplates: QueryList<ElementRef>;
   @Input() tableHeaderData: any = {}
   @Input() set getTableRowData(value) {
     this.listOfData = [
@@ -88,5 +91,12 @@ export class TableComponent {
 
   returnZero() {
     return 0;
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      // console.log(this.cellTemplates);
+      // console.log(this.cellTemplates.toArray());
+    }, 5000);
   }
 }
