@@ -27,10 +27,10 @@
         (nzCheckedChange)="refreshStatus()"
       ></td>
       <ng-container *ngFor="let head of tableHeaderData | keyvalue: returnZero">
-        <td *ngIf="head.key !== 'deadline'">
+        <td *ngIf="!timeFieldKeys.includes(head.key)">
           {{ data[head.key] }}
         </td>
-        <td *ngIf="head.key === 'deadline'">
+        <td *ngIf="timeFieldKeys.includes(head.key)">
           {{ data[head.key] | date: 'yyyy/MM/dd' }}
         </td>
       </ng-container>

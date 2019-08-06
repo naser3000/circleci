@@ -35,10 +35,11 @@
         nz-tooltip
         nzPlacement="right"
         [nzTitle]="isCollapsed ? 'Users' : ''">
-        <span title>
+        <a title
+          routerLink="users">
           <i nz-icon type="team"></i>
           <span>Users</span>
-        </span>
+        </a>
       </li>
       <li nz-menu-item
         nz-tooltip

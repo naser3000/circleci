@@ -24,6 +24,7 @@ export class TableComponent {
   listOfData: Array<any> = [];
   listOfDisplayData: Array<any> = [];
   mapOfCheckedId: { [key: string]: boolean } = {};
+  timeFieldKeys = ['deadline', 'created_at'];
   @Input() tableHeaderData: any = {}
   @Input() set getTableRowData(value) {
     this.listOfData = [
