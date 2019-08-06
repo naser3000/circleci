@@ -1,0 +1,39 @@
+<nz-table
+  #filterTable
+  [nzData]="listOfDisplayData"
+  [nzPageSize]="nzPageSize"
+  [nzPageSizeOptions]="nzPageSizeOptions"
+  nzShowSizeChanger>
+  <thead (nzSortChange)="sort($event)" nzSingleSort>
+    <tr>
+      <th
+        nzShowCheckbox
+        [(nzChecked)]="isAllDisplayDataChecked"
+        [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"
+      ></th>
+      <th nzShowSort
+        [nzSortKey]="head.key"
+        *ngFor="let head of tableHeaderData | keyvalue: returnZero">
+        {{ head.value }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of filterTable.data">
+      <td
+        nzShowCheckbox
+        [(nzChecked)]="mapOfCheckedId[data.id]"
+        (nzCheckedChange)="refreshStatus()"
+      ></td>
+      <ng-container *ngFor="let head of tableHeaderData | keyvalue: returnZero">
+        <td *ngIf="head.key !== 'deadline'">
+          {{ data[head.key] }}
+        </td>
+        <td *ngIf="head.key === 'deadline'">
+          {{ data[head.key] | date: 'yyyy/MM/dd' }}
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>
