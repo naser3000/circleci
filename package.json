@@ -9,7 +9,7 @@
     "e2e": "ng e2e",
     "postinstall": "ng build --aot --prod",
     "start": "node server.js",
-    "deploy": "git add . && git commit -m \"secound deploy on heroku\" && git push heroku master && ng serve"
+    "deploy": "git add . && git commit -m \"4th deploy on heroku\" && git push heroku master"
   },
   "private": true,
   "dependencies": {
