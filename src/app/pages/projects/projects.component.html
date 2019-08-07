@@ -23,7 +23,10 @@
           (submitedValue)="addUser($event)">
         </app-add-user>
         <li nz-menu-item>
-          <a>Upload File</a>
+          <app-upload-file
+            [uploadResult]="uploadResult"
+            (uploadedFileList)="uploadFileToProject($event)">
+          </app-upload-file>
         </li>
         <li nz-menu-divider></li>
         <li nz-menu-item>

@@ -9,6 +9,7 @@ export class ProjectsComponent implements OnInit {
 
   constructor() { }
   
+  uploadResult = null;
   isModalVisible = false;
   addUserModalShow = false;
   addUserType = null;
@@ -150,6 +151,11 @@ export class ProjectsComponent implements OnInit {
     this.addUserModalShow = false;
     this.selectedProjects = [];
     this.availableUser = [];
+  }
+
+  uploadFileToProject(files) {
+    this.selectedProjects = [];
+    this.uploadResult = 'success';
   }
 
   ngOnInit() {
