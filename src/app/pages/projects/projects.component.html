@@ -8,11 +8,20 @@
       </button>
       <ul nz-menu>
         <li nz-menu-item>
-          <a>Add Manager</a>
+          <a (click)="showAddUserModal('manager')">
+            Add Manager
+          </a>
         </li>
         <li nz-menu-item>
-          <a>Add Annotator</a>
+          <a (click)="showAddUserModal('annotator')">
+            Add Annotator
+          </a>
         </li>
+        <app-add-user
+          [(isModalVisible)]="addUserModalShow"
+          [usernameList]="availableUser"
+          (submitedValue)="addUser($event)">
+        </app-add-user>
         <li nz-menu-item>
           <a>Upload File</a>
         </li>
@@ -30,7 +39,7 @@
 <app-table
   [getTableRowData]="projectsList"
   [tableHeaderData]="tableHeaderData"
-  (itemSelected)="getSelectedItem($event)">
+  [(itemSelected)]="selectedProjects">
   <!-- <ng-template let-data #name>
     <td>
         <a [routerLink]="data?.id">

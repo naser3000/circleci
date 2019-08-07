@@ -28,7 +28,12 @@ export class TableComponent implements OnInit {
   mapOfCheckedId: { [key: string]: boolean } = {};
   timeFieldKeys = ['deadline', 'created_at'];
   linkFieldKeys = ['projectName'];
-  @Output() itemSelected: EventEmitter<any> = new EventEmitter();
+  @Output() itemSelectedChange: EventEmitter<any> = new EventEmitter();
+  @Input() set itemSelected(value) {
+    if (value.length === 0) {
+      this.checkAll(false);
+    }
+  }
   @ContentChild(TemplateRef) cellTemplates: QueryList<ElementRef>;
   @Input() tableHeaderData: any = {}
   @Input() set getTableRowData(value) {
@@ -86,7 +91,7 @@ export class TableComponent implements OnInit {
       !this.isAllDisplayDataChecked;
       const itemOfChecked = this.listOfData.filter(item => this.mapOfCheckedId[item.id]);
       this.idOfChecked = itemOfChecked.map(item => item.id);
-      this.itemSelected.emit(this.idOfChecked);
+      this.itemSelectedChange.emit(this.idOfChecked);
   }
 
   checkAll(value: boolean): void {

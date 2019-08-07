@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { TableModule } from 'src/app/components/table/table.module';
 import { NzDropDownModule, NzButtonModule, NzIconModule, NzModalModule } from 'ng-zorro-antd';
 import { AddProjectModule } from './add-project/add-project.module';
+import { AddUserModule } from './add-user/add-user.module';
 
 const routes: Routes = [
   {path: '', component: ProjectsComponent},
@@ -24,6 +25,7 @@ const routes: Routes = [
     NzIconModule,
     NzModalModule,
     AddProjectModule,
+    AddUserModule
   ],
   exports: [
     ProjectsComponent

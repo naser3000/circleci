@@ -10,6 +10,9 @@ export class ProjectsComponent implements OnInit {
   constructor() { }
   
   isModalVisible = false;
+  addUserModalShow = false;
+  addUserType = null;
+  availableUser = [];
   selectedProjects = [];
 
   tableHeaderData: any = {
@@ -111,9 +114,8 @@ export class ProjectsComponent implements OnInit {
     },
   ];
 
-  getSelectedItem(e) {
-    this.selectedProjects = [...e];
-  }
+  managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
+  annotatorList: string[] = ['annotator1', 'annotator2', 'annotator3', 'annotator4', 'annotator5'];
 
   closeModal() {
     this.isModalVisible = false;
@@ -125,6 +127,29 @@ export class ProjectsComponent implements OnInit {
   deleteProjects() {
     this.projectsList = this.projectsList.filter(item => !this.selectedProjects.includes(item.id));
     this.closeModal();
+  }
+
+  showAddUserModal(type) {
+    this.addUserModalShow = true;
+    this.addUserType = type
+    if (type === 'manager') {
+      this.availableUser = this.managerList;
+    } else if (type === 'annotator') {
+      this.availableUser = this.annotatorList;
+    }
+  }
+
+  addUser(value) {
+    console.log(value);
+    if (this.addUserType === 'manager') {
+      // this.availableUser = this.managerList;
+    } else if (this.addUserType === 'annotator') {
+      // this.availableUser = this.annotatorList;
+    }
+    this.addUserType = null;
+    this.addUserModalShow = false;
+    this.selectedProjects = [];
+    this.availableUser = [];
   }
 
   ngOnInit() {
