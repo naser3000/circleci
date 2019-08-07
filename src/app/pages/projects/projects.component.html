@@ -1,6 +1,36 @@
+<div class="operate">
+  <app-add-project (submitedValue)="addProject($event)"></app-add-project>
+  <span>
+    <nz-dropdown [nzDisabled]="selectedProjects.length === 0">
+      <button nz-button nz-dropdown>
+        <span>Actions</span>
+        <i nz-icon type="down"></i>
+      </button>
+      <ul nz-menu>
+        <li nz-menu-item>
+          <a>Add Manager</a>
+        </li>
+        <li nz-menu-item>
+          <a>Add Annotator</a>
+        </li>
+        <li nz-menu-item>
+          <a>Upload File</a>
+        </li>
+        <li nz-menu-divider></li>
+        <li nz-menu-item>
+          <a (click)="isModalVisible = true">
+            Delete Project
+          </a>
+        </li>
+      </ul>
+    </nz-dropdown>
+    <span *ngIf="selectedProjects.length">Selected {{ selectedProjects.length }} items</span>
+  </span>
+</div>
 <app-table
   [getTableRowData]="projectsList"
-  [tableHeaderData]="tableHeaderData">
+  [tableHeaderData]="tableHeaderData"
+  (itemSelected)="getSelectedItem($event)">
   <!-- <ng-template let-data #name>
     <td>
         <a [routerLink]="data?.id">
@@ -29,3 +59,10 @@
     </td>
   </ng-template> -->
 </app-table>
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Add new project"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="deleteProjects()">
+  <p>Are you sure for delete {{ selectedProjects.length }} item(s)?</p>
+</nz-modal>

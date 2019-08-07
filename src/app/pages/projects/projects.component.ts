@@ -8,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class ProjectsComponent implements OnInit {
 
   constructor() { }
+  
+  isModalVisible = false;
+  selectedProjects = [];
 
   tableHeaderData: any = {
     projectName: 'Project Name',
@@ -107,6 +110,22 @@ export class ProjectsComponent implements OnInit {
       deadline: new Date()
     },
   ];
+
+  getSelectedItem(e) {
+    this.selectedProjects = [...e];
+  }
+
+  closeModal() {
+    this.isModalVisible = false;
+  }
+  addProject(value) {
+    value['id'] = this.projectsList.length + 1;
+    this.projectsList = [...this.projectsList, value];
+  }
+  deleteProjects() {
+    this.projectsList = this.projectsList.filter(item => !this.selectedProjects.includes(item.id));
+    this.closeModal();
+  }
 
   ngOnInit() {
   }

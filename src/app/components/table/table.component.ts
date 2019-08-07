@@ -1,5 +1,6 @@
-import { Component, Input, ContentChild, TemplateRef, ElementRef, QueryList, ViewChildren, OnInit } from '@angular/core';
+import { Component, Input, ContentChild, TemplateRef, ElementRef, QueryList, ViewChildren, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgForOfContext } from '@angular/common';
+
 
 @Component({
   selector: 'app-table',
@@ -11,7 +12,7 @@ export class TableComponent implements OnInit {
   nzPageSizeOptions = [5, 10, 20, 30, 40, 50, 100];
 
   // checkbox variable
-  numberOfChecked = 0;
+  idOfChecked = [];
   isOperating = false;
   isIndeterminate = false;
   isAllDisplayDataChecked = false;
@@ -27,6 +28,7 @@ export class TableComponent implements OnInit {
   mapOfCheckedId: { [key: string]: boolean } = {};
   timeFieldKeys = ['deadline', 'created_at'];
   linkFieldKeys = ['projectName'];
+  @Output() itemSelected: EventEmitter<any> = new EventEmitter();
   @ContentChild(TemplateRef) cellTemplates: QueryList<ElementRef>;
   @Input() tableHeaderData: any = {}
   @Input() set getTableRowData(value) {
@@ -36,6 +38,7 @@ export class TableComponent implements OnInit {
     this.listOfDisplayData = [
       ...value
     ];
+    this.checkAll(false);
   }
 
   sort(sort: { key: string; value: string }): void {
@@ -81,7 +84,9 @@ export class TableComponent implements OnInit {
     this.isIndeterminate =
       this.listOfDisplayData.filter(item => !item.disabled).some(item => this.mapOfCheckedId[item.id]) &&
       !this.isAllDisplayDataChecked;
-    this.numberOfChecked = this.listOfData.filter(item => this.mapOfCheckedId[item.id]).length;
+      const itemOfChecked = this.listOfData.filter(item => this.mapOfCheckedId[item.id]);
+      this.idOfChecked = itemOfChecked.map(item => item.id);
+      this.itemSelected.emit(this.idOfChecked);
   }
 
   checkAll(value: boolean): void {
