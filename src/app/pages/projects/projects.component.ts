@@ -12,6 +12,7 @@ export class ProjectsComponent implements OnInit {
   uploadResult = null;
   isModalVisible = false;
   addUserModalShow = false;
+  addFileModalShow = false;
   addUserType = null;
   availableUser = [];
   selectedProjects = [];
@@ -127,6 +128,7 @@ export class ProjectsComponent implements OnInit {
   }
   deleteProjects() {
     this.projectsList = this.projectsList.filter(item => !this.selectedProjects.includes(item.id));
+    this.selectedProjects = [];
     this.closeModal();
   }
 
@@ -155,7 +157,10 @@ export class ProjectsComponent implements OnInit {
 
   uploadFileToProject(files) {
     this.selectedProjects = [];
-    this.uploadResult = 'success';
+    if (files) {
+      this.uploadResult = 'success';
+    }
+      
   }
 
   ngOnInit() {

@@ -23,7 +23,11 @@
           (submitedValue)="addUser($event)">
         </app-add-user>
         <li nz-menu-item>
+          <a (click)="addFileModalShow = true">
+            Upload File
+          </a>
           <app-upload-file
+            [(isModalVisible)]="addFileModalShow"
             [uploadResult]="uploadResult"
             (uploadedFileList)="uploadFileToProject($event)">
           </app-upload-file>
@@ -73,7 +77,7 @@
 </app-table>
 <nz-modal
   [(nzVisible)]="isModalVisible"
-  nzTitle="Add new project"
+  nzTitle="Delete project confirm"
   (nzOnCancel)="closeModal()"
   (nzOnOk)="deleteProjects()">
   <p>Are you sure for delete {{ selectedProjects.length }} item(s)?</p>

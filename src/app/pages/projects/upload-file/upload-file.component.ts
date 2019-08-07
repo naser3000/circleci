@@ -10,9 +10,14 @@ export class UploadFileComponent implements OnInit {
 
   constructor(private msg: NzMessageService) {}
 
-  isModalVisible = false;
+  showModal = false;
   uploading = false;
   fileList: UploadFile[] = [];
+  @Output() isModalVisibleChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input() set isModalVisible(value) {
+    this.showModal = value;
+    this.isModalVisibleChange.emit(value);
+  }
   @Output() uploadedFileList: EventEmitter<any>  = new EventEmitter();
   @Input() set uploadResult(status) {
     if (status === 'success') {

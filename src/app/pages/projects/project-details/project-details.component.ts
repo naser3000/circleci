@@ -9,6 +9,24 @@ export class ProjectDetailsComponent implements OnInit {
 
   constructor() { }
 
+  uploadResult = null;
+  isModalVisible = false;
+  addUserModalShow = false;
+  addFileModalShow = false;
+  deleteModalShow = false;
+  deletedCount = null;
+  deletedItemType = null;
+  addUserType = null;
+  availableUser = [];
+  selectedManagers = [];
+  selectedAnnotators = [];
+  selectedFiles = [];
+
+
+  managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
+  annotatorList: string[] = ['annotator1', 'annotator2', 'annotator3', 'annotator4', 'annotator5'];
+
+
   managerFields = {
     username: 'Username',
     fullname: 'Fullname',
@@ -17,7 +35,7 @@ export class ProjectDetailsComponent implements OnInit {
     created_at: 'Joined',
     price: '$ / User'
   };
-  anotatorFields = {
+  annotatorFields = {
     username: 'Username',
     fullname: 'Fullname',
     email: 'Email',
@@ -69,7 +87,7 @@ export class ProjectDetailsComponent implements OnInit {
       price: '3'
     },
   ];
-  anotatorsList = [
+  annotatorsList = [
     {
       id: 1,
       username: 'Username',
@@ -106,6 +124,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   filesList = [
     {
+      id: 1,
       name: 'csv_file_1',
       dataset: 'dataset_1',
       annotator: 'annotator_1',
@@ -113,6 +132,7 @@ export class ProjectDetailsComponent implements OnInit {
       created_at: new Date()
     },
     {
+      id: 2,
       name: 'csv_file_2',
       dataset: 'dataset_1',
       annotator: 'annotator_2',
@@ -120,6 +140,7 @@ export class ProjectDetailsComponent implements OnInit {
       created_at: new Date()
     },
     {
+      id: 3,
       name: 'csv_file_3',
       dataset: 'dataset_2',
       annotator: 'annotator_2',
@@ -127,13 +148,75 @@ export class ProjectDetailsComponent implements OnInit {
       created_at: new Date()
     },
     {
+      id: 4,
       name: 'csv_file_4',
       dataset: 'dataset_3',
       annotator: 'annotator_3',
       status: 'accepted',
       created_at: new Date()
     },
-  ]
+  ];
+
+  closeDeleteModal() {
+    this.deleteModalShow = false;
+  }
+
+  showAddUserModal(type) {
+    this.addUserModalShow = true;
+    this.addUserType = type
+    if (type === 'manager') {
+      this.availableUser = this.managerList;
+    } else if (type === 'annotator') {
+      this.availableUser = this.annotatorList;
+    }
+  }
+
+  showDeleteModal(count, type) {
+    this.deletedCount = count;
+    this.deletedItemType = type;
+    this.deleteModalShow = true;
+  }
+
+  deleteSelectedItem() {
+    switch (this.deletedItemType) {
+      case 'managers':
+        this.managersList = this.managersList.filter(item => !this.selectedManagers.includes(item.id));
+        this.selectedManagers = [];
+        break;
+      case 'annotators':
+        this.annotatorsList = this.annotatorsList.filter(item => !this.selectedAnnotators.includes(item.id));
+        this.selectedAnnotators = [];
+        break;
+      case 'files':
+        this.filesList = this.filesList.filter(item => !this.selectedFiles.includes(item.id));
+        this.selectedFiles = [];
+        break;
+    
+      default:
+        break;
+    }
+    this.closeDeleteModal();
+  }
+
+  addUser(value) {
+    if (this.addUserType === 'manager') {
+      // this.availableUser = this.managerList;
+      this.selectedManagers = [];
+    } else if (this.addUserType === 'annotator') {
+      // this.availableUser = this.annotatorList;
+      this.selectedAnnotators = [];
+    }
+    this.addUserType = null;
+    this.addUserModalShow = false;
+    this.availableUser = [];
+  }
+
+  uploadFileToProject(files) {
+    this.selectedFiles = [];
+    if (files) {
+      this.uploadResult = 'success';
+    }
+  }
 
   ngOnInit() {
   }

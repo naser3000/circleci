@@ -1,17 +1,97 @@
 <div>
-  <h3>Project Mangers</h3>
-  <app-table
-    [getTableRowData]="managersList"
-    [tableHeaderData]="managerFields">
-  </app-table>
-  <h3>Project Annotators</h3>
-  <app-table
-    [getTableRowData]="anotatorsList"
-    [tableHeaderData]="anotatorFields">
-  </app-table>
-  <h3>Project Files</h3>
-  <app-table
-    [getTableRowData]="filesList"
-    [tableHeaderData]="fileFields">
-  </app-table>
+  <div>
+    <h3>Project Mangers</h3>
+    <div class="operate">
+      <button
+        nz-button
+        [nzType]="'primary'"
+        (click)="showAddUserModal('manager')">
+        <i nz-icon type="plus"></i>
+        <span>Add New</span>
+      </button>
+      <span *ngIf="selectedManagers.length">
+        <button
+          nz-button
+          [nzType]="'danger'"
+          (click)="showDeleteModal(selectedManagers.length, 'managers')">
+          <i nz-icon type="delete"></i>
+          <span>Delete {{ selectedManagers.length }} item(s)</span>
+        </button>
+      </span>
+    </div>
+    <app-table
+      [getTableRowData]="managersList"
+      [tableHeaderData]="managerFields"
+      [(itemSelected)]="selectedManagers">
+    </app-table>
+  </div>
+  <div>
+    <h3>Project Annotators</h3>
+    <div class="operate">
+      <button
+        nz-button
+        [nzType]="'primary'"
+        (click)="showAddUserModal('annotator')">
+        <i nz-icon type="plus"></i>
+        <span>Add New</span>
+      </button>
+      <span *ngIf="selectedAnnotators.length">
+        <button
+          nz-button
+          [nzType]="'danger'"
+          (click)="showDeleteModal(selectedAnnotators.length, 'annotators')">
+          <i nz-icon type="delete"></i>
+          <span>Delete {{ selectedAnnotators.length }} item(s)</span>
+        </button>
+      </span>
+    </div>
+    <app-table
+      [getTableRowData]="annotatorsList"
+      [tableHeaderData]="annotatorFields"
+      [(itemSelected)]="selectedAnnotators">
+    </app-table>
+  </div>
+  <div>
+    <h3>Project Files</h3>
+    <div class="operate">
+      <button
+        nz-button
+        [nzType]="'primary'"
+        (click)="addFileModalShow = true">
+        <i nz-icon type="plus"></i>
+        <span>Add New</span>
+      </button>
+      <span *ngIf="selectedFiles.length">
+        <button
+          nz-button
+          [nzType]="'danger'"
+          (click)="showDeleteModal(selectedFiles.length, 'files')">
+          <i nz-icon type="delete"></i>
+          <span>Delete {{ selectedFiles.length }} item(s)</span>
+        </button>
+      </span>
+    </div>
+    <app-table
+      [getTableRowData]="filesList"
+      [tableHeaderData]="fileFields"
+      [(itemSelected)]="selectedFiles">
+    </app-table>
+  </div>
 </div>
+<app-add-user
+  [(isModalVisible)]="addUserModalShow"
+  [usernameList]="availableUser"
+  (submitedValue)="addUser($event)">
+</app-add-user>
+<app-upload-file
+  [(isModalVisible)]="addFileModalShow"
+  [uploadResult]="uploadResult"
+  (uploadedFileList)="uploadFileToProject($event)">
+</app-upload-file>
+<nz-modal
+  [(nzVisible)]="deleteModalShow"
+  nzTitle="Delete {{ deletedItemType }}"
+  (nzOnCancel)="closeDeleteModal()"
+  (nzOnOk)="deleteSelectedItem()">
+  <p>Are you sure for remove {{ deletedCount }} {{ deletedItemType }} from project?</p>
+</nz-modal>
