@@ -7,9 +7,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --aot -prod",
+    "postinstall": "ng build --aot --prod",
     "start": "node server.js",
-    "deploy": "git add . && git commit -m \"first deploy on heroku\" && git push heroku master && ng serve"
+    "deploy": "git add . && git commit -m \"secound deploy on heroku\" && git push heroku master && ng serve"
   },
   "private": true,
   "dependencies": {

@@ -3,8 +3,7 @@
   nzTitle="Add file to project"
   nzMaskClosable="false"
   [nzOkText]="null"
-  (nzOnCancel)="closeModal()"
-  (nzOnOk)="deleteProjects()">
+  (nzOnCancel)="closeModal()">
   <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true">
     <button nz-button><i nz-icon nzType="upload"></i><span>Select File</span></button>
   </nz-upload>
