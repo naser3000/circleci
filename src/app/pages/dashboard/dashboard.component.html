@@ -5,7 +5,7 @@
       [nzType]="'primary'"
       (click)="toggleCollapsed()"
       style="margin-bottom: 10px;">
-      <i nz-icon [type]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+      <i nz-icon [type]="isCollapsed ? 'more' : 'menu'"></i>
     </button>
     <ul
       nz-menu
@@ -19,8 +19,9 @@
         nzPlacement="right"
         [nzSelected]="currentChartDataIndex == i"
         [nzTitle]="isCollapsed ? file : ''"
+        (click)="setChartData(i)"
         *ngFor="let file of availableFiles; let i=index">
-        <span title (click)="setChartData(i)">
+        <span title>
           <i nz-icon type="database"></i>
           <span>{{ file }}</span>
         </span>

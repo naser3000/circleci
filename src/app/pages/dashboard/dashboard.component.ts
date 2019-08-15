@@ -16,7 +16,8 @@ export class DashboardComponent implements OnInit {
         'data_s3.csv',
         'data_s3e.csv',
         'dataa.csv',
-        'sample.csv',
+        'h_data.csv',
+        'v_data.csv',
     ];
     currentChartDataIndex = null;
 

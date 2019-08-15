@@ -18,7 +18,7 @@ export class ChartComponent implements OnInit {
         if (!data) {
             return;
         }
-        const lines = data.split('\n');
+        const lines = data.split(/\r\n|\n|\r/);
         // timestamp = [];
         // datasets = [];
         this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
@@ -28,7 +28,7 @@ export class ChartComponent implements OnInit {
             const colData = line.split(',');
             // timestamp.push(colData[0]);
             // datasets.push(colData[1]);
-            if (!isNaN(Number(colData[0])) && !isNaN(Number(colData[0]))) {
+            if ((!isNaN(Number(colData[0])) && !isNaN(Number(colData[1]))) || index !== 0) {
                 // x-y
                 // options.data.labels.push(new Date(Number(colData[0])));
                 // options.data.datasets[0].data.push(Number(colData[1]));
@@ -43,6 +43,7 @@ export class ChartComponent implements OnInit {
                 const m = moment(Number(colData[0]) * 1000);
                 // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
                 this.chartConfig.data.labels.push([`${index}---${m.format('HH:mm')}`]);
+                // this.chartConfig.data.labels.push([`${index}---${colData[0]}`]);
                 this.chartConfig.data.datasets[0].data.push(Number(colData[1]));
             }
         });
@@ -93,6 +94,9 @@ export class ChartComponent implements OnInit {
             elements: {
                 line: {
                     tension: 0,
+                },
+                point: {
+                    radius: 0
                 }
             }
         }
@@ -341,6 +345,10 @@ export class ChartComponent implements OnInit {
             this.selectedArea = [];
         }
     }
+    onFileLoad(fileLoadedEvent) {
+        const data = fileLoadedEvent.target.result;
+        this.getData = data;
+    }
     setChartData(e) {
         // const input = document.getElementById("data-upload");
         const input = e.target;
@@ -351,19 +359,9 @@ export class ChartComponent implements OnInit {
                 const file = files[key];
                 const reader = new FileReader();
                 // Closure to capture the file information.
-                const chart = this.chart;
-                // const currentTag = this.currentTag;
-                // const chartConfig = this.chartConfig;
-                // const tagsStatusInfo = this.tagsStatusInfo;
-                let self = this;
-                reader.onload = (function(theFile) {
-                    return function(e) {
-                        const data = e.target.result;
-                        self.getData = data;
-                    };
-                })(file);
+                reader.onload = this.onFileLoad;
                 // Read in the image file as a data URL.
-                reader.readAsText(file);
+                reader.readAsText(file, 'UTF-8');
             }
         }
     }
