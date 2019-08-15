@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NzMenuModule, NzButtonModule, NzIconModule, NzToolTipModule } from 'ng-zorro-antd';
+import { ChartModule } from './chart/chart.module';
 
 const routes: Routes = [
   {path: '', component: DashboardComponent}
@@ -18,7 +19,8 @@ const routes: Routes = [
     NzMenuModule,
     NzButtonModule,
     NzIconModule,
-    NzToolTipModule
+    NzToolTipModule,
+    ChartModule
   ],
   exports: [
     DashboardComponent

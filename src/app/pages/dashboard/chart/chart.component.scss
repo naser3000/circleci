@@ -1,0 +1,23 @@
+.chart-container {
+    position: relative;
+    display: inline-block;
+    width: 1000px !important;
+    height: 600px !important;
+    #overlay,
+    #chartJSContainer {
+        width: 1000px !important;
+        height: 600px !important;
+    }
+    #overlay {
+        position: absolute;
+        pointer-events: none;
+    }
+}
+.select-tag {
+    margin-top: 30px;
+    vertical-align: top;
+    display: inline-block;
+}
+select {
+    width: 200px;
+}
