@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
 
@@ -12,6 +12,43 @@ export class ChartComponent implements OnInit {
     constructor() { }
 
     chart = null;
+
+    @Input() set getData(data) {
+        // data is csv file dat
+        if (!data) {
+            return;
+        }
+        const lines = data.split('\n');
+        // timestamp = [];
+        // datasets = [];
+        this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
+        this.chartConfig.data.labels = [];
+        this.chartConfig.data.datasets[0].data = [];
+        lines.forEach((line, index) => {
+            const colData = line.split(',');
+            // timestamp.push(colData[0]);
+            // datasets.push(colData[1]);
+            if (!isNaN(Number(colData[0])) && !isNaN(Number(colData[0]))) {
+                // x-y
+                // options.data.labels.push(new Date(Number(colData[0])));
+                // options.data.datasets[0].data.push(Number(colData[1]));
+
+                // time series
+                // options.data.datasets[0].data.push({
+                //     x: Number(colData[0])*1000,
+                //     y: Number(colData[1])
+                // });
+
+                // custom label with moment.js
+                const m = moment(Number(colData[0]) * 1000);
+                // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
+                this.chartConfig.data.labels.push([`${index}---${m.format('HH:mm')}`]);
+                this.chartConfig.data.datasets[0].data.push(Number(colData[1]));
+            }
+        });
+        this.chart.update();
+
+    }
 
     chartConfig = {
         type: 'line',
@@ -315,41 +352,14 @@ export class ChartComponent implements OnInit {
                 const reader = new FileReader();
                 // Closure to capture the file information.
                 const chart = this.chart;
-                const currentTag = this.currentTag;
-                const chartConfig = this.chartConfig;
-                const tagsStatusInfo = this.tagsStatusInfo;
+                // const currentTag = this.currentTag;
+                // const chartConfig = this.chartConfig;
+                // const tagsStatusInfo = this.tagsStatusInfo;
+                let self = this;
                 reader.onload = (function(theFile) {
                     return function(e) {
                         const data = e.target.result;
-                        const lines = data.split('\n');
-                        // timestamp = [];
-                        // datasets = [];
-                        tagsStatusInfo[currentTag] = new Array(lines.length).fill(0);
-                        chartConfig.data.labels = [];
-                        chartConfig.data.datasets[0].data = [];
-                        lines.forEach((line, index) => {
-                            const colData = line.split(',');
-                            // timestamp.push(colData[0]);
-                            // datasets.push(colData[1]);
-                            if (!isNaN(Number(colData[0])) && !isNaN(Number(colData[0]))) {
-                                // x-y
-                                // options.data.labels.push(new Date(Number(colData[0])));
-                                // options.data.datasets[0].data.push(Number(colData[1]));
-
-                                // time series
-                                // options.data.datasets[0].data.push({
-                                //     x: Number(colData[0])*1000,
-                                //     y: Number(colData[1])
-                                // });
-
-                                // custom label with moment.js
-                                const m = moment(Number(colData[0]) * 1000);
-                                // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
-                                chartConfig.data.labels.push([`${index}---${m.format('HH:mm')}`]);
-                                chartConfig.data.datasets[0].data.push(Number(colData[1]));
-                            }
-                        });
-                        chart.update();
+                        self.getData = data;
                     };
                 })(file);
                 // Read in the image file as a data URL.
