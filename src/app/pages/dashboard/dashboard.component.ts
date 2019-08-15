@@ -10,6 +10,11 @@ import * as moment from 'moment';
 export class DashboardComponent implements OnInit {
 
     constructor() { }
+    isCollapsed = false;
+
+    toggleCollapsed(): void {
+        this.isCollapsed = !this.isCollapsed;
+    }
 
     chart = null;
 

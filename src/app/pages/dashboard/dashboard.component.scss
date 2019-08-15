@@ -1,17 +1,28 @@
-.chart-container {
-    position: relative;
-    display: inline-block;
-    width: 1000px !important;
-    height: 600px !important;
-}
-#overlay,
-#chartJSContainer {
-    width: 1000px !important;
-    height: 600px !important;
-}
-#overlay {
-    position: absolute;
-    pointer-events: none;
+.dashboard-content {
+    display: flex;
+    margin-left: -24px;
+    .project-files-menu {
+        display: flex;
+        flex-direction: column;
+        .project-files {
+            flex: 1;
+        }
+    }
+    .chart-container {
+        position: relative;
+        display: inline-block;
+        width: 1000px !important;
+        height: 600px !important;
+        #overlay,
+        #chartJSContainer {
+            width: 1000px !important;
+            height: 600px !important;
+        }
+        #overlay {
+            position: absolute;
+            pointer-events: none;
+        }
+    }
 }
 .select-tag {
     margin-top: 30px;
