@@ -56,7 +56,6 @@ export class ChartComponent implements OnInit {
                 this.chartConfig.data.datasets.push(dataSet);
             }
         }
-        console.log(curveNumber, this.chartConfig.data.datasets);
         lines.forEach((line, index) => {
             const colData = line.split(',');
             // timestamp.push(colData[0]);
