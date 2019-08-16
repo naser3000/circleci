@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ng build --aot --prod",
-    "deploy": "git add . && git commit -m \"5th deploy on heroku\" && git push heroku master"
+    "deploy": "git add . && git commit -m \"dashboard added (deploy on heroku)\" && git push heroku master"
   },
   "private": true,
   "dependencies": {
