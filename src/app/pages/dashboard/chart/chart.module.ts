@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChartComponent } from './chart.component';
-import { NzButtonModule, NzIconModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzIconModule, NzSelectModule } from 'ng-zorro-antd';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,9 @@ import { NzButtonModule, NzIconModule } from 'ng-zorro-antd';
   imports: [
     CommonModule,
     NzButtonModule,
-    NzIconModule
+    NzIconModule,
+    NzSelectModule,
+    FormsModule
   ],
   exports: [
     ChartComponent

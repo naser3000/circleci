@@ -409,7 +409,8 @@ export class ChartComponent implements OnInit {
             tagLength = this.tagsStatusInfo[this.currentTag].length;
         }
         // const v = document.getElementById("select-tag").value;
-        const v = e.terget.value;
+        // const v = e.target.value;
+        const v = e;
         this.currentTag = v;
         this.currentcolor = this.allTagsColor[this.currentTag];
         this.selectionContext.fillStyle = this.currentcolor;
@@ -434,7 +435,7 @@ export class ChartComponent implements OnInit {
                 const file = files[key];
                 const reader = new FileReader();
                 // Closure to capture the file information.
-                reader.onload = this.onFileLoad;
+                reader.onload = e => this.onFileLoad(e);
                 // Read in the image file as a data URL.
                 reader.readAsText(file, 'UTF-8');
             }
