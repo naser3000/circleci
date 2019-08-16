@@ -55,7 +55,13 @@ export class DashboardComponent implements OnInit {
             .subscribe(
                 response => {
                     // console.log(response);
-                    this.chartData = response;
+                    this.chartData = {
+                        data: response,
+                        type: {
+                            curveNumber: 1,
+                            xDataType: 'date'
+                        }
+                    };
                 },
                 error => {
                     // console.log('**', error);

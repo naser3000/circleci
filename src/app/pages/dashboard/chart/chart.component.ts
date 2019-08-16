@@ -55,6 +55,8 @@ export class ChartComponent implements OnInit {
                 };
                 this.chartConfig.data.datasets.push(dataSet);
             }
+        } else {
+            this.chartConfig.data.datasets.splice(1);
         }
         lines.forEach((line, index) => {
             const colData = line.split(',');
@@ -67,10 +69,17 @@ export class ChartComponent implements OnInit {
             //     this.chartConfig.options.scales.xAxes[0].ticks.max = Number(colData[0]);
             // }
             if ((!isNaN(Number(colData[0]))) || index !== 0) {
-                if (xDataType === 'float') {
-                    this.chartConfig.data.labels.push(Number(colData[0]));
-                } else {
-                    this.chartConfig.data.labels.push(colData[0]);
+                switch (xDataType) {
+                    case 'float':
+                        this.chartConfig.data.labels.push(Number(colData[0]));
+                        break;
+                    case 'timestamp':
+                        const m = moment(Number(colData[0]) * 1000);
+                        this.chartConfig.data.labels.push(`${index}---${m.format('HH:mm')}`);
+                        break;
+                    default:
+                        this.chartConfig.data.labels.push(colData[0]);
+                        break;
                 }
             }
             for (let col=1; col <= curveNumber; col++) {
