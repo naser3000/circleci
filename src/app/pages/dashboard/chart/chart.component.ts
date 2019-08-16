@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
+import 'chartjs-plugin-zoom';
 
 @Component({
     selector: 'app-chart',
@@ -12,12 +13,18 @@ export class ChartComponent implements OnInit {
     constructor() { }
 
     chart = null;
+    chartWidth = 1000;
 
     @Input() set getData(data) {
         // data is csv file dat
         if (!data) {
             return;
         }
+        
+        // clear selected erea
+        const canvas = <HTMLCanvasElement>document.getElementById('chartJSContainer');
+        this.selectionContext.clearRect(0, 0, canvas.width, canvas.height);
+        ///
         const lines = data.split(/\r\n|\n|\r/);
         // timestamp = [];
         // datasets = [];
@@ -28,6 +35,12 @@ export class ChartComponent implements OnInit {
             const colData = line.split(',');
             // timestamp.push(colData[0]);
             // datasets.push(colData[1]);
+            // if (index === 1) {
+            //     this.chartConfig.options.scales.xAxes[0].ticks.min = Number(colData[0]);
+            // }
+            // if (index === 101) {
+            //     this.chartConfig.options.scales.xAxes[0].ticks.max = Number(colData[0]);
+            // }
             if ((!isNaN(Number(colData[0])) && !isNaN(Number(colData[1]))) || index !== 0) {
                 // x-y
                 // options.data.labels.push(new Date(Number(colData[0])));
@@ -42,8 +55,9 @@ export class ChartComponent implements OnInit {
                 // custom label with moment.js
                 const m = moment(Number(colData[0]) * 1000);
                 // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
-                this.chartConfig.data.labels.push([`${index}---${m.format('HH:mm')}`]);
+                // this.chartConfig.data.labels.push(`${index}---${m.format('HH:mm')}`);
                 // this.chartConfig.data.labels.push([`${index}---${colData[0]}`]);
+                this.chartConfig.data.labels.push(Number(colData[0]));
                 this.chartConfig.data.datasets[0].data.push(Number(colData[1]));
             }
         });
@@ -57,12 +71,19 @@ export class ChartComponent implements OnInit {
             // labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", 
             // "Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
             labels: [],
+            // labels: ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12'],
+            // labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             datasets: [{
                     label: '# of Votes',
                     // data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
                     // data: [
-                    //     { x: new Date(2017, 01, 06, 18, 39, 30).getTime(), y: 100 },
-                    //     { x: new Date(2017, 01, 07, 18, 39, 28).getTime(), y: 101 },
+                    //     // { x: new Date(2017, 01, 06, 18, 39, 30).getTime(), y: 100 },
+                    //     // { x: new Date(2017, 01, 07, 18, 39, 28).getTime(), y: 101 },
+                    //     { x: 2, y: 101 },
+                    //     { x: 8, y: 26 },
+                    //     { x: 16, y: 59 },
+                    //     { x: 32, y: 78 },
+                    //     { x: 64, y: 13 },
                     // ],
                     data: [],
                     borderWidth: 1,
@@ -72,6 +93,8 @@ export class ChartComponent implements OnInit {
             ]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 xAxes: [{
                     display: true,
@@ -81,6 +104,18 @@ export class ChartComponent implements OnInit {
                     //         quarter: 'YYYY-MM-DD'
                     //     }
                     // }
+                    ticks: {
+                        // min: 's1',
+                        // max: 's5',
+                        // stepSize: 1300
+                        // maxTicksLimit: 5
+                        autoSkip: true,
+                        maxTicksLimit: 50,
+                        // suggestedMin: 31000,
+                        // suggestedMax: 32000,
+                        // min: 31000,
+                        // max: 32000
+                    },
                 }],
             },
             layout: {
@@ -98,7 +133,46 @@ export class ChartComponent implements OnInit {
                 point: {
                     radius: 0
                 }
-            }
+            },
+            // pan: {
+            //     enabled: true,
+            //     mode: 'x',     
+            // },
+            // zoom: {
+            //     enabled: true,         
+            //     mode: 'x',     
+            // },
+            // responsive: true
+            // plugins: {
+            //     zoom: {
+            //         pan: {
+            //             enabled: true,
+            //             mode: 'x',
+            //             // rangeMin: {
+            //             //     x: 's1'
+            //             // },
+            //             // rangeMax: {
+            //             //     x: 's12'
+            //             // },
+            //             // speed: 10000
+            //         },
+            //         zoom: {
+            //             enabled: true,
+            //             // drag: false,
+            //             mode: 'x',
+            //             // rangeMin: {
+            //             //     x: 's'
+            //             // },
+            //             // rangeMax: {
+            //             //     x: 's'
+            //             // },
+            //             // sensitivity: 0.0000000000000000000000000000000000000001,
+            //             // sensitivity: 0.5,
+            //             // speed: 0.1,
+            //             // threshold: 100
+            //         }
+            //     }
+            // },
         }
     }
 
@@ -267,10 +341,11 @@ export class ChartComponent implements OnInit {
         });
     }
     drawRects(rectList) {
+        const chartArea = this.chart.chartArea;
         rectList.forEach(area => {
-            this.selectionContext.fillRect(area.startX,
-                area.startY,
-                area.w,
+            this.selectionContext.fillRect((area.startX - chartArea.left) * this.chartWidth / 1000 + chartArea.left,
+                (area.startY - chartArea.top) * this.chartWidth / 1000 + chartArea.top,
+                area.w * this.chartWidth / 1000,
                 this.chart.chartArea.bottom - this.chart.chartArea.top);
         });
     }
@@ -392,6 +467,26 @@ export class ChartComponent implements OnInit {
         return {
             x: i = Math.round((i - r.left - l) / c * o.width / e.currentDevicePixelRatio),
             y: n = Math.round((n - r.top - d) / f * o.height / e.currentDevicePixelRatio)
+        }
+    }
+
+    scaleDataWithZoom() {
+        const overlay = <HTMLCanvasElement>document.getElementById('overlay');
+        overlay.width = this.chartWidth;
+        overlay.height = 600;
+        this.selectionContext = overlay.getContext('2d');
+        this.selectionContext.globalAlpha = 0.3;
+        this.drawAllRects();
+    }
+
+    zoomChart(zoomIn = 1) {
+        if (zoomIn === 1 && this.chartWidth < 6000) {
+            this.chartWidth += 1000;
+            this.scaleDataWithZoom();
+        }
+        if (zoomIn === -1 && this.chartWidth > 1000) {
+            this.chartWidth -= 1000;
+            this.scaleDataWithZoom();
         }
     }
 

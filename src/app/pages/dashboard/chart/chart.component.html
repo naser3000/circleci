@@ -1,10 +1,33 @@
-<div class="chart-container">
+<!-- <div class="chart-container">
   <canvas id="overlay" width="600" height="400"></canvas>
   <canvas id="chartJSContainer" width="600" height="400">
     {{ chart }}
   </canvas>
+</div> -->
+<div class="zoom-actions">
+  <button
+    nz-button
+    [nzType]="'primary'"
+    (click)="zoomChart()">
+    <i nz-icon type="zoom-in"></i>
+  </button>
+  <button
+    nz-button
+    [nzType]="'primary'"
+    (click)="zoomChart(-1)">
+    <i nz-icon type="zoom-out"></i>
+  </button>
 </div>
-<div class="select-tag">
+<div class="chart-container">
+  <div class="chart-parent zoom-{{ chartWidth / 1000 }}">
+    <canvas id="overlay"></canvas>
+    <!-- <canvas id="overlay" style="display: none"></canvas> -->
+    <canvas id="chartJSContainer">
+      {{ chart }}
+    </canvas>
+  </div>
+</div>
+<!-- <div class="select-tag">
   <select id="select-tag" (change)="setTag($event)">
       <option value="tag1">Tag 1</option>
       <option value="tag2">Tag 2</option>
@@ -13,4 +36,4 @@
       <option value="tag5">Tag 5</option>
   </select>
   <input type="file" id="data-upload" multiple (change)="setChartData($event)">
-</div>
+</div> -->
