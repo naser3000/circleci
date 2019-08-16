@@ -14,6 +14,8 @@ export class ChartComponent implements OnInit {
 
     chart = null;
     chartWidth = 1000;
+    uploadResult = null;
+    addFileModalShow = false;
 
     @Input() set getData(data) {
         // data is csv file dat
@@ -425,11 +427,7 @@ export class ChartComponent implements OnInit {
         const data = fileLoadedEvent.target.result;
         this.getData = data;
     }
-    setChartData(e) {
-        // const input = document.getElementById("data-upload");
-        const input = e.target;
-        const files = input.files;
-        // if (files && files[0]) {
+    loadFiles(files) {
         for (let key in files) {
             if (typeof(files[key]) === 'object') {
                 const file = files[key];
@@ -440,6 +438,13 @@ export class ChartComponent implements OnInit {
                 reader.readAsText(file, 'UTF-8');
             }
         }
+    }
+    setChartData(e) {
+        // const input = document.getElementById("data-upload");
+        const input = e.target;
+        const files = input.files;
+        // if (files && files[0]) {
+        this.loadFiles(files);
     }
     getRelativePosition = function (t, e) {
         let  i, n, a = t.originalEvent || t,
@@ -488,6 +493,13 @@ export class ChartComponent implements OnInit {
         if (zoomIn === -1 && this.chartWidth > 1000) {
             this.chartWidth -= 1000;
             this.scaleDataWithZoom();
+        }
+    }
+
+    uploadFileToProject(files) {
+        if (files) {
+            this.loadFiles(files);
+            this.uploadResult = 'success';
         }
     }
 

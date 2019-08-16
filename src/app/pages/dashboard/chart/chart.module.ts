@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChartComponent } from './chart.component';
 import { NzButtonModule, NzIconModule, NzSelectModule } from 'ng-zorro-antd';
 import { FormsModule } from '@angular/forms';
+import { UploadFileModule } from '../../projects/upload-file/upload-file.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
     NzButtonModule,
     NzIconModule,
     NzSelectModule,
-    FormsModule
+    FormsModule,
+    UploadFileModule
   ],
   exports: [
     ChartComponent

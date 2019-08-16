@@ -14,15 +14,14 @@
   <button
     nz-button
     [nzType]="'primary'"
-    (click)="uploadData.click()">
+    (click)="addFileModalShow = true">
     <i nz-icon type="upload"></i>
     Upload File (for test only)
-    <input
-      multiple
-      #uploadData
-      type="file"
-      id="data-upload"
-      (change)="setChartData($event)">
+    <app-upload-file
+      [(isModalVisible)]="addFileModalShow"
+      [uploadResult]="uploadResult"
+      (uploadedFileList)="uploadFileToProject($event)">
+    </app-upload-file>
   </button>
   <nz-select
     class="tag-selection"
