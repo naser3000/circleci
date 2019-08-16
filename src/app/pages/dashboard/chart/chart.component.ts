@@ -16,11 +16,22 @@ export class ChartComponent implements OnInit {
     chartWidth = 1000;
     uploadResult = null;
     addFileModalShow = false;
+    lineColors = ['blue', 'red', 'green', 'orange', 'brown', 'black', 'yellow', 'darkblue', 'darkcyan', 'darkgreen'];
 
-    @Input() set getData(data) {
+    @Input() set getData(dataObj) {
         // data is csv file dat
-        if (!data) {
+        if (!dataObj) {
             return;
+        }
+        if (!dataObj.data) {
+            return;
+        }
+        const data = dataObj.data;
+        let curveNumber = 1;
+        let xDataType = null;
+        if (dataObj.type) {
+            curveNumber = dataObj.type.curveNumber || 1;
+            xDataType = dataObj.type.xDataType;
         }
         
         // clear selected erea
@@ -33,6 +44,19 @@ export class ChartComponent implements OnInit {
         this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
         this.chartConfig.data.labels = [];
         this.chartConfig.data.datasets[0].data = [];
+        if (curveNumber > 1) {
+            for (let col=2; col <= curveNumber; col++) {
+                const dataSet: any = {
+                    label: `# Curve ${col}`,
+                    data: [],
+                    borderWidth: 1,
+                    borderColor: this.lineColors[col - 1],
+                    backgroundColor: 'transparent',
+                };
+                this.chartConfig.data.datasets.push(dataSet);
+            }
+        }
+        console.log(curveNumber, this.chartConfig.data.datasets);
         lines.forEach((line, index) => {
             const colData = line.split(',');
             // timestamp.push(colData[0]);
@@ -43,26 +67,37 @@ export class ChartComponent implements OnInit {
             // if (index === 101) {
             //     this.chartConfig.options.scales.xAxes[0].ticks.max = Number(colData[0]);
             // }
-            if ((!isNaN(Number(colData[0])) && !isNaN(Number(colData[1]))) || index !== 0) {
-                // x-y
-                // options.data.labels.push(new Date(Number(colData[0])));
-                // options.data.datasets[0].data.push(Number(colData[1]));
+            if ((!isNaN(Number(colData[0]))) || index !== 0) {
+                if (xDataType === 'float') {
+                    this.chartConfig.data.labels.push(Number(colData[0]));
+                } else {
+                    this.chartConfig.data.labels.push(colData[0]);
+                }
+            }
+            for (let col=1; col <= curveNumber; col++) {
+                // if ((!isNaN(Number(colData[0])) && !isNaN(Number(colData[1]))) || index !== 0) {
+                if ((!isNaN(Number(colData[col]))) || index !== 0) {
+                    // x-y
+                    // options.data.labels.push(new Date(Number(colData[0])));
+                    // options.data.datasets[0].data.push(Number(colData[1]));
 
-                // time series
-                // options.data.datasets[0].data.push({
-                //     x: Number(colData[0])*1000,
-                //     y: Number(colData[1])
-                // });
+                    // time series
+                    // options.data.datasets[0].data.push({
+                    //     x: Number(colData[0])*1000,
+                    //     y: Number(colData[1])
+                    // });
 
-                // custom label with moment.js
-                const m = moment(Number(colData[0]) * 1000);
-                // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
-                // this.chartConfig.data.labels.push(`${index}---${m.format('HH:mm')}`);
-                // this.chartConfig.data.labels.push([`${index}---${colData[0]}`]);
-                this.chartConfig.data.labels.push(Number(colData[0]));
-                this.chartConfig.data.datasets[0].data.push(Number(colData[1]));
+                    // // custom label with moment.js
+                    // const m = moment(Number(colData[0]) * 1000);
+                    // // options.data.labels.push([m.format('YYYY-MM-DD'), m.format('HH:mm')]);
+                    // // this.chartConfig.data.labels.push(`${index}---${m.format('HH:mm')}`);
+                    // // this.chartConfig.data.labels.push([`${index}---${colData[0]}`]);
+                    // this.chartConfig.data.labels.push(Number(colData[0]));
+                    this.chartConfig.data.datasets[col - 1].data.push(Number(colData[col]));
+                }
             }
         });
+        console.log(this.chartConfig.data);
         this.chart.update();
 
     }
@@ -76,7 +111,7 @@ export class ChartComponent implements OnInit {
             // labels: ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12'],
             // labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
             datasets: [{
-                    label: '# of Votes',
+                    label: '# Curve 1',
                     // data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
                     // data: [
                     //     // { x: new Date(2017, 01, 06, 18, 39, 30).getTime(), y: 100 },
@@ -423,17 +458,20 @@ export class ChartComponent implements OnInit {
             this.selectedArea = [];
         }
     }
-    onFileLoad(fileLoadedEvent) {
-        const data = fileLoadedEvent.target.result;
+    onFileLoad(fileLoadedEvent, type=null) {
+        const data = {
+            data: fileLoadedEvent.target.result,
+            type: type
+        };
         this.getData = data;
     }
-    loadFiles(files) {
+    loadFiles(files, type=null) {
         for (let key in files) {
             if (typeof(files[key]) === 'object') {
                 const file = files[key];
                 const reader = new FileReader();
                 // Closure to capture the file information.
-                reader.onload = e => this.onFileLoad(e);
+                reader.onload = e => this.onFileLoad(e, type);
                 // Read in the image file as a data URL.
                 reader.readAsText(file, 'UTF-8');
             }
@@ -498,8 +536,11 @@ export class ChartComponent implements OnInit {
 
     uploadFileToProject(files) {
         if (files) {
-            this.loadFiles(files);
+            this.loadFiles(files.files, files.type);
             this.uploadResult = 'success';
+            setTimeout(() => {
+                this.uploadResult = null;
+            }, 1);
         }
     }
 

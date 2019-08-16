@@ -7,14 +7,47 @@
   <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true">
     <button nz-button><i nz-icon nzType="upload"></i><span>Select File</span></button>
   </nz-upload>
-  <button
-    nz-button
-    [nzType]="'primary'"
-    [nzLoading]="uploading"
-    (click)="handleUpload()"
-    [disabled]="fileList.length == 0"
-    style="margin-top: 16px"
-  >
-    {{ uploading ? 'Uploading' : 'Start Upload' }}
-  </button>
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event, validateForm.value)">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Number of curves</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <nz-input-number
+          formControlName="curveNumber"
+          [nzMin]="1"
+          [nzMax]="10"
+          [nzStep]="1">
+        </nz-input-number>
+        <nz-form-explain
+          *ngIf="validateForm.get('curveNumber')?.dirty && validateForm.get('curveNumber')?.hasError('required')">
+          Please set number of curves
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>x Data Type</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <nz-select
+          formControlName="xDataType">
+          <nz-option nzValue="float" nzLabel="Float"></nz-option>
+          <nz-option nzValue="date" nzLabel="Date"></nz-option>
+        </nz-select>
+        <nz-form-explain *ngIf="validateForm.get('xDataType')?.dirty && validateForm.get('xDataType')?.errors">
+          Please select data type
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control [nzOffset]="7" [nzSpan]="12">
+        <button
+          nz-button
+          nzType="primary"
+          style="margin-right: 10px;"
+          [nzLoading]="uploading"
+          [disabled]="fileList.length == 0 || !validateForm.valid">
+          Submit
+        </button>
+        <button nz-button (click)="resetForm($event)">Reset</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </nz-modal>

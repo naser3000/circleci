@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { UploadFile, NzMessageService } from 'ng-zorro-antd';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-upload-file',
@@ -8,11 +9,22 @@ import { UploadFile, NzMessageService } from 'ng-zorro-antd';
 })
 export class UploadFileComponent implements OnInit {
 
-  constructor(private msg: NzMessageService) {}
-
+  constructor(private msg: NzMessageService,
+    private fb: FormBuilder) {
+    this.validateForm = this.fb.group({
+      curveNumber: ['', [Validators.required]],
+      xDataType: ['', [Validators.required]],
+    });
+  }
+  validateForm: FormGroup;
+  
   showModal = false;
   uploading = false;
   fileList: UploadFile[] = [];
+  fileDataResult = {
+    files: [],
+    type: null
+  };
   @Output() isModalVisibleChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() set isModalVisible(value) {
     this.showModal = value;
@@ -26,6 +38,7 @@ export class UploadFileComponent implements OnInit {
       this.msg.success('upload successfully.');
       setTimeout(() => {
         this.isModalVisible = false;
+        this.resetForm(null);
       }, 1000);
     } else if (status === 'failed') {
       this.uploading = false;
@@ -46,7 +59,8 @@ export class UploadFileComponent implements OnInit {
       formData.append('files[]', file);
     });
     this.uploading = true;
-    this.uploadedFileList.emit(this.fileList);
+    this.fileDataResult.files = this.fileList;
+    this.uploadedFileList.emit(this.fileDataResult);
     // You can use any AJAX library you like
     // const req = new HttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts/', formData, {
     //   // reportProgress: true
@@ -70,6 +84,28 @@ export class UploadFileComponent implements OnInit {
   closeModal() {
     this.isModalVisible = false;
     this.uploadedFileList.emit(null);
+  }
+
+  submitForm = ($event: any, value: any) => {
+    $event.preventDefault();
+    for (const key in this.validateForm.controls) {
+      this.validateForm.controls[key].markAsDirty();
+      this.validateForm.controls[key].updateValueAndValidity();
+    }
+    this.fileDataResult.type = value;
+    this.handleUpload();
+  };
+
+  resetForm(e: MouseEvent): void {
+    if (e) {
+      e.preventDefault();
+    }
+      
+    this.validateForm.reset();
+    for (const key in this.validateForm.controls) {
+      this.validateForm.controls[key].markAsPristine();
+      this.validateForm.controls[key].updateValueAndValidity();
+    }
   }
 
   ngOnInit() {

@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UploadFileComponent } from './upload-file.component';
-import { NzModalModule, NzUploadModule, NzButtonModule } from 'ng-zorro-antd';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  NzModalModule,
+  NzUploadModule,
+  NzButtonModule,
+  NzFormModule,
+  NzInputNumberModule,
+  NzSelectModule 
+} from 'ng-zorro-antd';
 
 @NgModule({
   declarations: [
@@ -9,9 +17,13 @@ import { NzModalModule, NzUploadModule, NzButtonModule } from 'ng-zorro-antd';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     NzModalModule,
     NzUploadModule,
-    NzButtonModule
+    NzButtonModule,
+    NzFormModule,
+    NzSelectModule,
+    NzInputNumberModule,
   ],
   exports: [
     UploadFileComponent
