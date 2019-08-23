@@ -1,0 +1,60 @@
+<div class="processing-content">
+  <!-- <div class="project-files-menu">
+    <button
+      nz-button
+      [nzType]="'primary'"
+      (click)="toggleCollapsed()"
+      style="margin-bottom: 10px;">
+      <i nz-icon [type]="isCollapsed ? 'more' : 'menu'"></i>
+    </button>
+    <ul
+      nz-menu
+      class="project-files"
+      nzTheme="light"
+      [nzMode]="'inline'"
+      [nzInlineCollapsed]="isCollapsed">
+      <li
+        nz-menu-item
+        nz-tooltip
+        nzPlacement="right"
+        [nzSelected]="currentChartDataIndex == i"
+        [nzTitle]="isCollapsed ? file : ''"
+        (click)="setChartData(i)"
+        *ngFor="let file of availableFiles; let i=index">
+        <span title>
+          <i nz-icon type="database"></i>
+          <span>{{ file }}</span>
+        </span>
+      </li>
+    </ul>
+  </div> -->
+  <div
+    class="project-desc"
+    *ngIf="currentChartDataIndex === null">
+    <p>
+      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, magni quos, dolor voluptatibus similique impedit asperiores sunt totam corporis nihil, doloremque iste consectetur saepe id aspernatur dolorem dolore consequuntur laboriosam.
+    </p>
+  </div>
+  <app-chart
+    *ngIf="currentChartDataIndex !== null"
+    [getData]="chartData">
+  </app-chart>
+</div>
+<div class="next-prev-actions">
+  <button
+    nz-button
+    [nzType]="'primary'"
+    [disabled]="!currentChartDataIndex"
+    (click)="setChartData('prev')">
+    <i nz-icon type="left"></i>
+    Previos
+  </button>
+  <button
+    nz-button
+    [nzType]="'primary'"
+    [disabled]="currentChartDataIndex === availableFiles.length - 1"
+    (click)="setChartData('next')">
+    Next
+    <i nz-icon type="right"></i>
+  </button>
+</div>

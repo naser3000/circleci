@@ -36,7 +36,9 @@ export class ChartComponent implements OnInit {
         
         // clear selected erea
         const canvas = <HTMLCanvasElement>document.getElementById('chartJSContainer');
-        this.selectionContext.clearRect(0, 0, canvas.width, canvas.height);
+        if (this.selectionContext) {
+            this.selectionContext.clearRect(0, 0, canvas.width, canvas.height);
+        }
         ///
         const lines = data.split(/\r\n|\n|\r/);
         // timestamp = [];
@@ -106,7 +108,9 @@ export class ChartComponent implements OnInit {
             }
         });
         console.log(this.chartConfig.data);
-        this.chart.update();
+        if (this.chart) {
+            this.chart.update();
+        }
 
     }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,67 +7,41 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DashboardComponent implements OnInit {
 
-    constructor(private _http: HttpClient) { }
-    isCollapsed = false;
+    constructor() { }
 
-    availableFiles = [
-        'data_nob.csv',
-        'data_s3.csv',
-        'data_s3e.csv',
-        'dataa.csv',
-        'h_data.csv',
-        'v_data.csv',
+    userProjects = [
+        {
+            id: 1,
+            name: 'Project 1',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
+        {
+            id: 2,
+            name: 'Project 2',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
+        {
+            id: 3,
+            name: 'Project 3',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
+        {
+            id: 3,
+            name: 'Project 3',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
+        {
+            id: 4,
+            name: 'Project 4',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
+        {
+            id: 5,
+            name: 'Project 5',
+            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
+        },
     ];
-    currentChartDataIndex = null;
-
-    chartData = null;
-
-    toggleCollapsed(): void {
-        this.isCollapsed = !this.isCollapsed;
-    }
-
-    setChartData(index) {
-        if (index === 'next') {
-            if (this.currentChartDataIndex === null) {
-                return;
-            }
-            this.currentChartDataIndex = this.currentChartDataIndex + 1;
-            if (this.currentChartDataIndex === this.availableFiles.length) {
-                this.currentChartDataIndex = this.availableFiles.length - 1;
-                return;
-            }
-        } else if (index === 'prev') {
-            if (this.currentChartDataIndex === null) {
-                return;
-            }
-            this.currentChartDataIndex = this.currentChartDataIndex - 1;
-            if (this.currentChartDataIndex < 0) {
-                this.currentChartDataIndex = 0;
-                return;
-            }
-        } else {
-            this.currentChartDataIndex = index;
-        }
-
-        const fileName = this.availableFiles[this.currentChartDataIndex];
-        this._http.get(`assets/chart-data/${fileName}`, {responseType: 'text'})
-            .subscribe(
-                response => {
-                    // console.log(response);
-                    this.chartData = {
-                        data: response,
-                        type: {
-                            curveNumber: 1,
-                            xDataType: 'date'
-                        }
-                    };
-                },
-                error => {
-                    // console.log('**', error);
-                }
-            );
-    }
-
+ 
     ngOnInit() {
 
     }

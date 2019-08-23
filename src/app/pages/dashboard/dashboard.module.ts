@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
-import { NzMenuModule, NzButtonModule, NzIconModule, NzToolTipModule } from 'ng-zorro-antd';
-import { ChartModule } from './chart/chart.module';
+import { NzMenuModule, NzButtonModule, NzIconModule, NzToolTipModule, NzCardModule, NzGridModule } from 'ng-zorro-antd';
 
 const routes: Routes = [
-  {path: '', component: DashboardComponent}
+  { path: '', component: DashboardComponent },
+  { path: ':id', loadChildren: './processing/processing.module#ProcessingModule' }
 ];
 
 @NgModule({
@@ -16,11 +16,10 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    NzMenuModule,
     NzButtonModule,
     NzIconModule,
-    NzToolTipModule,
-    ChartModule
+    NzCardModule,
+    NzGridModule
   ],
   exports: [
     DashboardComponent
