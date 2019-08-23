@@ -51,6 +51,12 @@ export class SettingComponent implements OnInit {
     this.addGroupModalShow = false;
   }
 
+  deleteSelectedItem() {
+    this.groupsList = this.groupsList.filter(item => !this.selectedGroups.includes(item.id));
+    this.selectedGroups = [];
+    this.closeDeleteModal();
+  }
+
   showDeleteModal(count, type) {
     this.deletedCount = count;
     this.deletedItemType = type;
