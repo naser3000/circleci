@@ -5,7 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { TableModule } from 'src/app/components/table/table.module';
 import { AddUserModule } from '../add-user/add-user.module';
 import { UploadFileModule } from '../upload-file/upload-file.module';
-import { NzButtonModule, NzIconModule, NzModalModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzIconModule, NzModalModule, NzTagModule, NzInputModule } from 'ng-zorro-antd';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: '', component: ProjectDetailsComponent}
@@ -18,12 +19,15 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule,
     TableModule,
     AddUserModule,
     UploadFileModule,
     NzButtonModule,
     NzIconModule,
-    NzModalModule
+    NzModalModule,
+    NzTagModule,
+    NzInputModule
   ],
   exports: [
     ProjectDetailsComponent
