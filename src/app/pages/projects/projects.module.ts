@@ -27,8 +27,7 @@ const routes: Routes = [
     NzModalModule,
     AddProjectModule,
     AddUserModule,
-    UploadFileModule,
-    NzIconModule
+    UploadFileModule
   ],
   exports: [
     ProjectsComponent

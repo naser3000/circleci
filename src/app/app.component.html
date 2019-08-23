@@ -55,10 +55,11 @@
         nz-tooltip
         nzPlacement="right"
         [nzTitle]="isCollapsed ? 'Setting' : ''">
-        <span title>
+        <a title
+          routerLink="settings">
           <i nz-icon type="setting"></i>
           <span>Setting</span>
-        </span>
+        </a>
       </li>
     </ul>
   </nz-sider>
