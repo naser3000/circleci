@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-setting',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _group: GroupService) { }
 
   selectedGroups = [];
   deletedCount = 0;
@@ -19,42 +20,38 @@ export class SettingComponent implements OnInit {
     projects: 'Project(s)',
     managers: 'Manager(s)',
   };
-  groupsList = [
-    {
-      id: 1,
-      name: 'Group 1',
-      projects: 3,
-      managers: 15,
-    },
-    {
-      id: 2,
-      name: 'Group 2',
-      projects: 2,
-      managers: 8,
-    },
-    {
-      id: 3,
-      name: 'Group 3',
-      projects: 5,
-      managers: 19,
-    },
-    {
-      id: 4,
-      name: 'Group 4',
-      projects: 1,
-      managers: 4,
-    },
-  ];
+  groupsList: any = [];
 
   addGroup(value) {
-    this.selectedGroups = [];
-    this.addGroupModalShow = false;
+    const data = {
+      name: value.groupName
+    };
+
+    this._group.addNewGroup(data).subscribe(
+      response => {
+        this.addGroupModalShow = false;
+        this.groupsList = [...this.groupsList , response];
+      },
+      error => {}
+    );
+    // this.selectedGroups = [];
   }
 
   deleteSelectedItem() {
-    this.groupsList = this.groupsList.filter(item => !this.selectedGroups.includes(item.id));
-    this.selectedGroups = [];
-    this.closeDeleteModal();
+    const deleted = [];
+    this.selectedGroups.forEach((group_id, i) => {
+      this._group.deleteGroup(group_id).subscribe(
+        response => {
+          deleted.push(group_id);
+          if ( i === this.selectedGroups.length - 1 )  {
+            this.groupsList = this.groupsList.filter(item => !deleted.includes(item.id));
+            this.selectedGroups = [];
+            this.closeDeleteModal();
+          }
+        },
+        error => {}
+      );
+    });
   }
 
   showDeleteModal(count, type) {
@@ -66,9 +63,20 @@ export class SettingComponent implements OnInit {
   closeDeleteModal() {
     this.deleteModalShow = false;
   }
+
+  getGroupsList() {
+    this._group.getAllGroups().subscribe(
+      response => {
+        this.groupsList = response;
+      },
+      error => {
+      }
+    );
+  }
   
 
   ngOnInit() {
+    this.getGroupsList();
   }
 
 }
