@@ -24,6 +24,23 @@
       [getTableRowData]="groupsList"
       [tableHeaderData]="groupFields"
       [(itemSelected)]="selectedGroups">
+      <ng-template let-data>
+        <td>
+            <a [routerLink]="'groups/' + data?.id">
+              {{ data?.name }}
+            </a>
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+            {{ data?.projects?.length }}
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+            {{ data?.managers?.length }}
+        </td>
+      </ng-template>
     </app-table>
   </div>
 </div>

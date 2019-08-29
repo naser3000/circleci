@@ -1,31 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SettingComponent } from './setting.component';
+import { GroupDetailsComponent } from './group-details.component';
 import { Routes, RouterModule } from '@angular/router';
 import { TableModule } from 'src/app/components/table/table.module';
-import { NzIconModule, NzButtonModule, NzModalModule } from 'ng-zorro-antd';
-import { AddGroupModule } from './add-group/add-group.module';
+import { NzButtonModule, NzIconModule, NzModalModule } from 'ng-zorro-antd';
+import { AddUserModule } from '../../projects/add-user/add-user.module';
 
 const routes: Routes = [
-  { path: '', component: SettingComponent },
-  { path: 'groups/:id', loadChildren: '../groups/group-details/group-details.module#GroupDetailsModule' },
+  { path: '', component: GroupDetailsComponent }
 ];
 
 @NgModule({
   declarations: [
-    SettingComponent
+    GroupDetailsComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     TableModule,
-    AddGroupModule,
+    AddUserModule,
     NzButtonModule,
     NzIconModule,
     NzModalModule
   ],
   exports: [
-    SettingComponent
+    GroupDetailsComponent
   ]
 })
-export class SettingModule { }
+export class GroupDetailsModule { }
