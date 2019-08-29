@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
@@ -23,7 +23,7 @@ export class AddProjectComponent {
   }
   isModalVisible = false;
   @Output() submitedValue: EventEmitter<any> = new EventEmitter();
-  groupOptions: string[] = ['group1', 'group2', 'group3', 'group4', 'group5'];
+  @Input() groupOptions = [];
   validateForm: FormGroup;
   submitForm = ($event: any, value: any) => {
     $event.preventDefault();

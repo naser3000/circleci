@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ProjectService } from 'src/app/services/project.service';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-projects',
@@ -7,114 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProjectsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _project: ProjectService,
+    private _group: GroupService) { }
   
   uploadResult = null;
   isModalVisible = false;
   addUserModalShow = false;
   addFileModalShow = false;
   addUserType = null;
+  availableGroup: any = [];
   availableUser = [];
   selectedProjects = [];
 
   tableHeaderData: any = {
-    projectName: 'Project Name',
-    group: 'Group',
+    name: 'Project Name',
+    group_name: 'Group',
     description: 'Description',
     instruction: 'Instruction',
     deadline: 'Deadline',
   }
 
-  projectsList: Array<any> = [
-    {
-      id: '1',
-      projectName: 'John Brown',
-      group: 'group 1',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '2',
-      projectName: 'Jim Green',
-      group: 'group 2',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '3',
-      projectName: 'Joe Black',
-      group: 'group 3',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '4',
-      projectName: 'Jim Red',
-      group: 'group 4',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '5',
-      projectName: 'Jim Red',
-      group: 'group 5',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '6',
-      projectName: 'Jim Red',
-      group: 'group 6',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '7',
-      projectName: 'Jim Red',
-      group: 'group 7',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '8',
-      projectName: 'Jim Red',
-      group: 'group 8',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '9',
-      projectName: 'Jim Red',
-      group: 'group 9',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '10',
-      projectName: 'Jim Red',
-      group: 'group 10',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-    {
-      id: '11',
-      projectName: 'Jim Red',
-      group: 'group 11',
-      description: 'Description',
-      instruction: 'Instruction',
-      deadline: new Date()
-    },
-  ];
+  projectsList: any = [];
 
   managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
   annotatorList: string[] = ['annotator1', 'annotator2', 'annotator3', 'annotator4', 'annotator5'];
@@ -122,10 +37,27 @@ export class ProjectsComponent implements OnInit {
   closeModal() {
     this.isModalVisible = false;
   }
+
   addProject(value) {
-    value['id'] = this.projectsList.length + 1;
-    this.projectsList = [...this.projectsList, value];
+    console.log(value);
+    const data = {
+      name: value.projectName,
+      group: value.group,
+      description: value.description,
+      instruction: value.instruction,
+      deadline: value.deadline,
+      tags: []
+    };
+    this._project.addNewProject(data).subscribe(
+      response => {
+        this.projectsList = [...this.projectsList, response];
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
+
   deleteProjects() {
     this.projectsList = this.projectsList.filter(item => !this.selectedProjects.includes(item.id));
     this.selectedProjects = [];
@@ -163,7 +95,29 @@ export class ProjectsComponent implements OnInit {
       
   }
 
+  getGroupList() {
+    this._group.getAllGroups().subscribe(
+      response => {
+        this.availableGroup = response;
+      },
+      error => {}
+    );
+  }
+
+  getProjectList() {
+    this._project.getAllProjects().subscribe(
+      response => {
+        this.projectsList = response;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   ngOnInit() {
+    this.getGroupList();
+    this.getProjectList();
   }
 
 }

@@ -1,5 +1,4 @@
-import { Component, Input, ContentChild, TemplateRef, ElementRef, QueryList, ViewChildren, OnInit, Output, EventEmitter } from '@angular/core';
-import { NgForOfContext } from '@angular/common';
+import { Component, Input, TemplateRef, OnInit, Output, EventEmitter, ContentChildren } from '@angular/core';
 
 
 @Component({
@@ -34,7 +33,7 @@ export class TableComponent implements OnInit {
       this.checkAll(false);
     }
   }
-  @ContentChild(TemplateRef) cellTemplates: QueryList<ElementRef>;
+  @ContentChildren(TemplateRef) cellTemplates;
   @Input() tableHeaderData: any = {}
   @Input() set getTableRowData(value) {
     this.listOfData = [
@@ -104,9 +103,5 @@ export class TableComponent implements OnInit {
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      // console.log(this.cellTemplates);
-      // console.log(this.cellTemplates.toArray());
-    }, 5000);
   }
 }

@@ -1,5 +1,8 @@
 <div class="operate">
-  <app-add-project (submitedValue)="addProject($event)"></app-add-project>
+  <app-add-project
+    [groupOptions]="availableGroup"
+    (submitedValue)="addProject($event)">
+  </app-add-project>
   <span>
     <nz-dropdown [nzDisabled]="selectedProjects.length === 0">
       <button nz-button nz-dropdown>
@@ -47,33 +50,33 @@
   [getTableRowData]="projectsList"
   [tableHeaderData]="tableHeaderData"
   [(itemSelected)]="selectedProjects">
-  <!-- <ng-template let-data #name>
+  <ng-template let-data>
     <td>
         <a [routerLink]="data?.id">
           {{ data?.name}}
         </a>
     </td>
   </ng-template>
-  <ng-template let-data #group>
+  <ng-template let-data>
     <td>
-        {{ data?.group}}
+        {{ data?.group_name}}
     </td>
   </ng-template>
-  <ng-template let-data #description>
+  <ng-template let-data>
     <td>
         {{ data?.description}}
     </td>
   </ng-template>
-  <ng-template let-data #instruction>
+  <ng-template let-data>
     <td>
         {{ data?.instruction}}
     </td>
   </ng-template>
-  <ng-template let-data #deadline>
+  <ng-template let-data>
     <td>
         {{ data?.deadline | date: 'yyyy/MM/dd' }}
     </td>
-  </ng-template> -->
+  </ng-template>
 </app-table>
 <nz-modal
   [(nzVisible)]="isModalVisible"
