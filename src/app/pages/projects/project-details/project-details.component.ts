@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { TagService } from 'src/app/services/tag.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-project-details',
@@ -7,8 +9,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class ProjectDetailsComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private _route: ActivatedRoute,
+    private _tag: TagService) { }
+  
+  project_id = null;
   uploadResult = null;
   isModalVisible = false;
   addUserModalShow = false;
@@ -23,7 +27,7 @@ export class ProjectDetailsComponent implements OnInit {
   selectedFiles = [];
 
 
-  tags = ['Tag 1', 'Tag 2', 'Tag 3'];
+  tags: any = [];
   inputVisible = false;
   inputValue = '';
   @ViewChild('inputElement') inputElement: ElementRef;
@@ -222,8 +226,13 @@ export class ProjectDetailsComponent implements OnInit {
     }
   }
 
-  handleClose(removedTag: {}): void {
-    this.tags = this.tags.filter(tag => tag !== removedTag);
+  handleClose(removedTag): void {
+    this._tag.deleteTag(removedTag.id).subscribe(
+      response => {
+        this.tags = this.tags.filter(tag => tag.id !== removedTag.id);
+      },
+      error => {}
+    );
   }
 
   sliceTagName(tag: string): string {
@@ -240,13 +249,38 @@ export class ProjectDetailsComponent implements OnInit {
 
   handleInputConfirm(): void {
     if (this.inputValue && this.tags.indexOf(this.inputValue) === -1) {
-      this.tags = [...this.tags, this.inputValue];
+      const data = {
+        name: this.inputValue,
+        project: this.project_id
+      };
+
+      this._tag.addNewTag(data).subscribe(
+        response => {
+          this.tags = [...this.tags, response];
+        },
+        error => {}
+      );
     }
     this.inputValue = '';
     this.inputVisible = false;
   }
 
+  getTagList() {
+    this._tag.getAllTags().subscribe(
+      response => {
+        this.tags = response;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   ngOnInit() {
+    this.getTagList();
+    this._route.params.subscribe(param => {
+      this.project_id = param['id'];
+    });
   }
 
 }

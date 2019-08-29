@@ -7,7 +7,7 @@
         [nzMode]="'closeable'"
         (nzAfterClose)="handleClose(tag)"
       >
-        {{ sliceTagName(tag) }}
+        {{ sliceTagName(tag?.name) }}
       </nz-tag>
       <nz-tag
         *ngIf="!inputVisible"
