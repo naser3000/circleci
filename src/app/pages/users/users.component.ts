@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ManagerService } from 'src/app/services/manager.service';
+import { AnnotatorService } from 'src/app/services/annotator.service';
 
 @Component({
   selector: 'app-users',
@@ -8,7 +9,8 @@ import { ManagerService } from 'src/app/services/manager.service';
 })
 export class UsersComponent implements OnInit {
 
-  constructor(private _manager: ManagerService) { }
+  constructor(private _manager: ManagerService,
+    private _annotator: AnnotatorService) { }
 
   managerFields = {
     username: 'Username',
@@ -18,7 +20,7 @@ export class UsersComponent implements OnInit {
     created_at: 'Joined',
     price: '$ / User'
   };
-  anotatorFields = {
+  annotatorFields = {
     username: 'Username',
     fullname: 'Fullname',
     email: 'Email',
@@ -26,7 +28,7 @@ export class UsersComponent implements OnInit {
     created_at: 'Joined'
   };
   managersList: any = [];
-  anotatorsList: any = [];
+  annotatorsList: any = [];
 
   getManagerList() {
     this._manager.getAllManagers().subscribe(
@@ -37,8 +39,18 @@ export class UsersComponent implements OnInit {
     );
   }
 
+  getAnnotatorList() {
+    this._annotator.getAllAnnotators().subscribe(
+      response => {
+        this.annotatorsList = response;
+      },
+      error => {}
+    );
+  }
+
   ngOnInit() {
     this.getManagerList();
+    this.getAnnotatorList();
   }
 
 }

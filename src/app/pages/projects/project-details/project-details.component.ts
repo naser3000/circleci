@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { TagService } from 'src/app/services/tag.service';
 import { ActivatedRoute } from '@angular/router';
 import { ManagerService } from 'src/app/services/manager.service';
+import { AnnotatorService } from 'src/app/services/annotator.service';
 
 @Component({
   selector: 'app-project-details',
@@ -12,7 +13,8 @@ export class ProjectDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
     private _tag: TagService,
-    private _manager: ManagerService) { }
+    private _manager: ManagerService,
+    private _annotator: AnnotatorService) { }
   
   project_id = null;
   uploadResult = null;
@@ -60,40 +62,7 @@ export class ProjectDetailsComponent implements OnInit {
     created_at: 'Upload Date'
   };
   managersList : any = [];
-  annotatorsList = [
-    {
-      id: 1,
-      username: 'Username',
-      fullname: 'John Brown',
-      email: 'John.Brown@gmail.com',
-      status: 'active',
-      created_at: new Date(),
-    },
-    {
-      id: 2,
-      username: 'Username',
-      fullname: 'Jim Green',
-      email: 'Jim.Green@gmail.com',
-      status: 'canceled',
-      created_at: new Date(),
-    },
-    {
-      id: 3,
-      username: 'Username',
-      fullname: 'Joe Black',
-      email: 'Joe.Black@gmail.com',
-      status: 'hold',
-      created_at: new Date(),
-    },
-    {
-      id: 4,
-      username: 'Username',
-      fullname: 'Jim Red',
-      email: 'Jim.Red@gmail.com',
-      status: 'removed',
-      created_at: new Date(),
-    },
-  ];
+  annotatorsList: any = [];
 
   filesList = [
     {
@@ -250,9 +219,19 @@ export class ProjectDetailsComponent implements OnInit {
     );
   }
 
+  getAnnotatorList() {
+    this._annotator.getAllAnnotators().subscribe(
+      response => {
+        this.annotatorsList = response;
+      },
+      error => {}
+    );
+  }
+
   ngOnInit() {
     this.getTagList();
     this.getManagerList();
+    this.getAnnotatorList();
     this._route.params.subscribe(param => {
       this.project_id = param['id'];
     });
