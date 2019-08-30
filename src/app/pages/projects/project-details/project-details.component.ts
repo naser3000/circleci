@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { TagService } from 'src/app/services/tag.service';
 import { ActivatedRoute } from '@angular/router';
+import { ManagerService } from 'src/app/services/manager.service';
 
 @Component({
   selector: 'app-project-details',
@@ -10,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ProjectDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
-    private _tag: TagService) { }
+    private _tag: TagService,
+    private _manager: ManagerService) { }
   
   project_id = null;
   uploadResult = null;
@@ -57,44 +59,7 @@ export class ProjectDetailsComponent implements OnInit {
     status: 'Status',
     created_at: 'Upload Date'
   };
-  managersList = [
-    {
-      id: 1,
-      username: 'Username',
-      fullname: 'John Brown',
-      email: 'John.Brown@gmail.com',
-      status: 'active',
-      created_at: new Date(),
-      price: '20'
-    },
-    {
-      id: 2,
-      username: 'Username',
-      fullname: 'Jim Green',
-      email: 'Jim.Green@gmail.com',
-      status: 'canceled',
-      created_at: new Date(),
-      price: '10'
-    },
-    {
-      id: 3,
-      username: 'Username',
-      fullname: 'Joe Black',
-      email: 'Joe.Black@gmail.com',
-      status: 'hold',
-      created_at: new Date(),
-      price: '15'
-    },
-    {
-      id: 4,
-      username: 'Username',
-      fullname: 'Jim Red',
-      email: 'Jim.Red@gmail.com',
-      status: 'removed',
-      created_at: new Date(),
-      price: '3'
-    },
-  ];
+  managersList : any = [];
   annotatorsList = [
     {
       id: 1,
@@ -276,8 +241,18 @@ export class ProjectDetailsComponent implements OnInit {
     );
   }
 
+  getManagerList() {
+    this._manager.getAllManagers().subscribe(
+      response => {
+        this.managersList = response;
+      },
+      error => {}
+    );
+  }
+
   ngOnInit() {
     this.getTagList();
+    this.getManagerList();
     this._route.params.subscribe(param => {
       this.project_id = param['id'];
     });

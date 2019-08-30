@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ManagerService } from 'src/app/services/manager.service';
 
 @Component({
   selector: 'app-users',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _manager: ManagerService) { }
 
   managerFields = {
     username: 'Username',
@@ -24,80 +25,20 @@ export class UsersComponent implements OnInit {
     status: 'Status',
     created_at: 'Joined'
   };
-  managersList = [
-    {
-      id: 1,
-      username: 'Username',
-      fullname: 'John Brown',
-      email: 'John.Brown@gmail.com',
-      status: 'active',
-      created_at: new Date(),
-      price: '20'
-    },
-    {
-      id: 2,
-      username: 'Username',
-      fullname: 'Jim Green',
-      email: 'Jim.Green@gmail.com',
-      status: 'canceled',
-      created_at: new Date(),
-      price: '10'
-    },
-    {
-      id: 3,
-      username: 'Username',
-      fullname: 'Joe Black',
-      email: 'Joe.Black@gmail.com',
-      status: 'hold',
-      created_at: new Date(),
-      price: '15'
-    },
-    {
-      id: 4,
-      username: 'Username',
-      fullname: 'Jim Red',
-      email: 'Jim.Red@gmail.com',
-      status: 'removed',
-      created_at: new Date(),
-      price: '3'
-    },
-  ];
-  anotatorsList = [
-    {
-      id: 1,
-      username: 'Username',
-      fullname: 'John Brown',
-      email: 'John.Brown@gmail.com',
-      status: 'active',
-      created_at: new Date(),
-    },
-    {
-      id: 2,
-      username: 'Username',
-      fullname: 'Jim Green',
-      email: 'Jim.Green@gmail.com',
-      status: 'canceled',
-      created_at: new Date(),
-    },
-    {
-      id: 3,
-      username: 'Username',
-      fullname: 'Joe Black',
-      email: 'Joe.Black@gmail.com',
-      status: 'hold',
-      created_at: new Date(),
-    },
-    {
-      id: 4,
-      username: 'Username',
-      fullname: 'Jim Red',
-      email: 'Jim.Red@gmail.com',
-      status: 'removed',
-      created_at: new Date(),
-    },
-  ];
+  managersList: any = [];
+  anotatorsList: any = [];
+
+  getManagerList() {
+    this._manager.getAllManagers().subscribe(
+      response => {
+        this.managersList = response;
+      },
+      error => {}
+    );
+  }
 
   ngOnInit() {
+    this.getManagerList();
   }
 
 }

@@ -23,6 +23,38 @@
       [getTableRowData]="managersList"
       [tableHeaderData]="managerFields"
       [(itemSelected)]="selectedManagers">
+      <ng-template let-data>
+        <td>
+            <a [routerLink]="data?.id">
+              {{ data?.user?.username }}
+            </a>
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+          {{ data?.user?.first_name }} {{ data?.user?.last_name }}
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+          {{ data?.user?.email }}
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+          {{ data?.invite_status }}
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+          {{ data?.user?.date_joined | date: 'yyyy/MM/dd' }}
+        </td>
+      </ng-template>
+      <ng-template let-data>
+        <td>
+          {{ data?.price_per_annotation }}
+        </td>
+      </ng-template>
     </app-table>
   </div>
 </div>
