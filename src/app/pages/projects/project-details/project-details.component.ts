@@ -3,6 +3,7 @@ import { TagService } from 'src/app/services/tag.service';
 import { ActivatedRoute } from '@angular/router';
 import { ManagerService } from 'src/app/services/manager.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
+import { ProjectFileService } from 'src/app/services/project-file.service';
 
 @Component({
   selector: 'app-project-details',
@@ -13,6 +14,7 @@ export class ProjectDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
     private _tag: TagService,
+    private _proj_file: ProjectFileService,
     private _manager: ManagerService,
     private _annotator: AnnotatorService) { }
   
@@ -56,48 +58,14 @@ export class ProjectDetailsComponent implements OnInit {
   };
   fileFields = {
     name: 'File Name',
-    dataset: 'Dataset',
+    // dataset: 'Dataset',
     annotator: 'Annotator',
-    status: 'Status',
+    // status: 'Status',
     created_at: 'Upload Date'
   };
   managersList : any = [];
   annotatorsList: any = [];
-
-  filesList = [
-    {
-      id: 1,
-      name: 'csv_file_1',
-      dataset: 'dataset_1',
-      annotator: 'annotator_1',
-      status: 'accepted',
-      created_at: new Date()
-    },
-    {
-      id: 2,
-      name: 'csv_file_2',
-      dataset: 'dataset_1',
-      annotator: 'annotator_2',
-      status: 'accepted',
-      created_at: new Date()
-    },
-    {
-      id: 3,
-      name: 'csv_file_3',
-      dataset: 'dataset_2',
-      annotator: 'annotator_2',
-      status: 'understood',
-      created_at: new Date()
-    },
-    {
-      id: 4,
-      name: 'csv_file_4',
-      dataset: 'dataset_3',
-      annotator: 'annotator_3',
-      status: 'accepted',
-      created_at: new Date()
-    },
-  ];
+  filesList: any = [];
 
   closeDeleteModal() {
     this.deleteModalShow = false;
@@ -120,6 +88,7 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   deleteSelectedItem() {
+    const deleted = [];
     switch (this.deletedItemType) {
       case 'managers':
         this.managersList = this.managersList.filter(item => !this.selectedManagers.includes(item.id));
@@ -130,13 +99,45 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectedAnnotators = [];
         break;
       case 'files':
-        this.filesList = this.filesList.filter(item => !this.selectedFiles.includes(item.id));
-        this.selectedFiles = [];
+        this.selectedFiles.forEach((file_id, i) => {
+          this._proj_file.deleteProjectFile(file_id).subscribe(
+            response => {
+              deleted.push(file_id);
+              if ( i === this.selectedFiles.length - 1 )  {
+                this.handleDeleteResponse(deleted);
+              }
+            },
+            error => {
+              if ( i === this.selectedFiles.length - 1 )  {
+                this.handleDeleteResponse(deleted);
+              }
+            }
+          );
+        });
         break;
-    
       default:
         break;
     }
+  }
+
+  handleDeleteResponse(deleted_ids) {
+    switch (this.deletedItemType) {
+      case 'managers':
+        this.managersList = this.managersList.filter(item => !deleted_ids.includes(item.id));
+        this.selectedManagers = [];
+        break;
+      case 'annotators':
+        this.annotatorsList = this.annotatorsList.filter(item => !deleted_ids.includes(item.id));
+        this.selectedAnnotators = [];
+        break;
+      case 'files':
+          this.filesList = this.filesList.filter(item => !deleted_ids.includes(item.id));
+          this.selectedFiles = [];
+        break;
+      default:
+        break;
+    }
+    this.deletedItemType = null;
     this.closeDeleteModal();
   }
 
@@ -154,10 +155,21 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   uploadFileToProject(files) {
-    this.selectedFiles = [];
-    if (files) {
-      this.uploadResult = 'success';
-    }
+    const data: FormData = new FormData();
+    data.append('file', files.files[0]);
+    data.append('project', this.project_id);
+    this._proj_file.addNewProjectFile(data).subscribe(
+      response => {
+        this.filesList = [...this.filesList, response];
+        this.selectedFiles = [];
+        this.uploadResult = 'success';
+      },
+      error => {}
+    );
+    // this.selectedFiles = [];
+    // if (files) {
+    //   this.uploadResult = 'success';
+    // }
   }
 
   handleClose(removedTag): void {
@@ -228,10 +240,20 @@ export class ProjectDetailsComponent implements OnInit {
     );
   }
 
+  getProjectFileList() {
+    this._proj_file.getAllProjectFiles().subscribe(
+      response => {
+        this.filesList = response;
+      },
+      error => {}
+    );
+  }
+
   ngOnInit() {
     this.getTagList();
     this.getManagerList();
     this.getAnnotatorList();
+    this.getProjectFileList();
     this._route.params.subscribe(param => {
       this.project_id = param['id'];
     });
