@@ -11,8 +11,8 @@ export class ManagerService {
 
   private ROOT_URL = environment.rootURL + '/api/v1/managers/';
 
-  getAllManagers() {
-    return this._http.get(this.ROOT_URL);
+  getAllManagers(filter = null) {
+    return this._http.get(this.ROOT_URL, {params: filter});
   }
 
   getSingleManager(id) {

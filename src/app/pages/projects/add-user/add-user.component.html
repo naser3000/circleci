@@ -16,8 +16,8 @@
             [nzAutocomplete]="auto"
           />
           <nz-autocomplete nzBackfill #auto>
-            <nz-auto-option *ngFor="let option of usernameList" [nzValue]="option">
-              {{ option }}
+            <nz-auto-option *ngFor="let option of usernameList" [nzValue]="option?.id">
+              {{ option?.name }}
             </nz-auto-option>
           </nz-autocomplete>
         </span>

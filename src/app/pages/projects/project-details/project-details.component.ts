@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ManagerService } from 'src/app/services/manager.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
 import { ProjectFileService } from 'src/app/services/project-file.service';
+import { ProjectService } from 'src/app/services/project.service';
 
 @Component({
   selector: 'app-project-details',
@@ -13,12 +14,14 @@ import { ProjectFileService } from 'src/app/services/project-file.service';
 export class ProjectDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
+    private _project: ProjectService,
     private _tag: TagService,
     private _proj_file: ProjectFileService,
     private _manager: ManagerService,
     private _annotator: AnnotatorService) { }
   
   project_id = null;
+  project_details = null;
   uploadResult = null;
   isModalVisible = false;
   addUserModalShow = false;
@@ -37,8 +40,8 @@ export class ProjectDetailsComponent implements OnInit {
   inputVisible = false;
   inputValue = '';
   @ViewChild('inputElement') inputElement: ElementRef;
-  managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
-  annotatorList: string[] = ['annotator1', 'annotator2', 'annotator3', 'annotator4', 'annotator5'];
+  managerList: any = [];
+  annotatorList: any = [];
 
 
   managerFields = {
@@ -95,8 +98,18 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectedManagers = [];
         break;
       case 'annotators':
-        this.annotatorsList = this.annotatorsList.filter(item => !this.selectedAnnotators.includes(item.id));
-        this.selectedAnnotators = [];
+        const data = {
+          annotator_ids: this.project_details.annotator_ids.filter(id => !this.selectedAnnotators.includes(id))
+        };
+        this._project.editProject(data, this.project_id).subscribe(
+          response => {
+            this.annotatorsList = response['annotators'];
+            this.selectedAnnotators = [];
+            this.deletedItemType = null;
+            this.closeDeleteModal();
+          },
+          error => {},
+        );
         break;
       case 'files':
         this.selectedFiles.forEach((file_id, i) => {
@@ -146,7 +159,15 @@ export class ProjectDetailsComponent implements OnInit {
       // this.availableUser = this.managerList;
       this.selectedManagers = [];
     } else if (this.addUserType === 'annotator') {
-      // this.availableUser = this.annotatorList;
+      const data = {
+        annotator_ids: [...this.project_details.annotator_ids, value.username]
+      };
+      this._project.editProject(data, this.project_id).subscribe(
+        response => {
+          this.annotatorsList = response['annotators'];
+        },
+        error => {},
+      );
       this.selectedAnnotators = [];
     }
     this.addUserType = null;
@@ -211,51 +232,73 @@ export class ProjectDetailsComponent implements OnInit {
     this.inputVisible = false;
   }
 
-  getTagList() {
-    this._tag.getAllTags().subscribe(
-      response => {
-        this.tags = response;
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }
+  // getTagList() {
+  //   this._tag.getAllTags().subscribe(
+  //     response => {
+  //       this.tags = response;
+  //     },
+  //     error => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }
 
-  getManagerList() {
-    this._manager.getAllManagers().subscribe(
-      response => {
-        this.managersList = response;
-      },
-      error => {}
-    );
-  }
+  // getManagerList() {
+  //   const filter = {
+  //     groups: this.project_id
+  //   };
+  //   this._manager.getAllManagers().subscribe(
+  //     (response: Array<any>) => {
+  //       this.managersList = response;
+  //     },
+  //     error => {}
+  //   );
+  // }
 
   getAnnotatorList() {
     this._annotator.getAllAnnotators().subscribe(
-      response => {
-        this.annotatorsList = response;
+      (response: Array<any>) => {
+        this.annotatorList = response.map(annotator => {
+          const data = {
+            id: annotator.id,
+            name: annotator.user.username
+          };
+          return data;
+        });
       },
       error => {}
     );
   }
 
-  getProjectFileList() {
-    this._proj_file.getAllProjectFiles().subscribe(
+  // getProjectFileList() {
+  //   this._proj_file.getAllProjectFiles().subscribe(
+  //     response => {
+  //       this.filesList = response;
+  //     },
+  //     error => {}
+  //   );
+  // }
+
+  getProjectDetails() {
+    this._project.getSingleProject(this.project_id).subscribe(
       response => {
-        this.filesList = response;
+        this.project_details = response;
+        this.tags = response['tags'];
+        this.annotatorsList = response['annotators'];
+        this.filesList = response['files'];
       },
       error => {}
     );
   }
 
   ngOnInit() {
-    this.getTagList();
-    this.getManagerList();
+    // this.getTagList();
+    // this.getManagerList();
     this.getAnnotatorList();
-    this.getProjectFileList();
+    // this.getProjectFileList();
     this._route.params.subscribe(param => {
       this.project_id = param['id'];
+      this.getProjectDetails();
     });
   }
 
