@@ -103,6 +103,7 @@ export class ProjectDetailsComponent implements OnInit {
         };
         this._project.editProject(data, this.project_id).subscribe(
           response => {
+            this.project_details = response;
             this.annotatorsList = response['annotators'];
             this.selectedAnnotators = [];
             this.deletedItemType = null;
@@ -164,6 +165,7 @@ export class ProjectDetailsComponent implements OnInit {
       };
       this._project.editProject(data, this.project_id).subscribe(
         response => {
+          this.project_details = response;
           this.annotatorsList = response['annotators'];
         },
         error => {},

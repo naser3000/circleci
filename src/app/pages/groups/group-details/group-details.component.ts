@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManagerService } from 'src/app/services/manager.service';
+import { ActivatedRoute } from '@angular/router';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-group-details',
@@ -8,14 +10,18 @@ import { ManagerService } from 'src/app/services/manager.service';
 })
 export class GroupDetailsComponent implements OnInit {
 
-  constructor(private _manager: ManagerService) { }
+  constructor(private _route: ActivatedRoute,
+    private _group: GroupService,
+    private _manager: ManagerService) { }
   
+  group_id = null;
+  group_details = null;
   deletedCount = 0;
   deletedItemType = null;
   deleteModalShow = false;
   addUserModalShow = false;
   selectedManagers = [];
-  managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
+  managerList: any = [];
   managerFields = {
     username: 'Username',
     fullname: 'Fullname',
@@ -43,8 +49,19 @@ export class GroupDetailsComponent implements OnInit {
   deleteSelectedItem() {
     switch (this.deletedItemType) {
       case 'managers':
-        this.managersList = this.managersList.filter(item => !this.selectedManagers.includes(item.id));
-        this.selectedManagers = [];
+          const data = {
+            manager_ids: this.group_details.manager_ids.filter(id => !this.selectedManagers.includes(id))
+          };
+          this._group.editGroup(data, this.group_id).subscribe(
+            response => {
+              this.group_details = response;
+              this.managersList = response['managers'];
+              this.selectedManagers = [];
+              this.deletedItemType = null;
+              this.closeDeleteModal();
+            },
+            error => {},
+          );
         break;   
       default:
         break;
@@ -52,15 +69,41 @@ export class GroupDetailsComponent implements OnInit {
     this.closeDeleteModal();
   }
 
-  addUser() {
+  addUser(value) {
+    const data = {
+      manager_ids: [...this.group_details.manager_ids, value.username]
+    };
+    this._group.editGroup(data, this.group_id).subscribe(
+      response => {
+        this.group_details = response;
+        this.managersList = response['managers'];
+      },
+      error => {},
+    );
     this.selectedManagers = [];
     this.addUserModalShow = false;
   }
 
   getManagerList() {
     this._manager.getAllManagers().subscribe(
+      (response: Array<any>) => {
+        this.managerList = response.map(manager => {
+          const data = {
+            id: manager.id,
+            name: manager.user.username
+          };
+          return data;
+        });
+      },
+      error => {}
+    );
+  }
+
+  getGroupDetails() {
+    this._group.getSingleGroup(this.group_id).subscribe(
       response => {
-        this.managersList = response;
+        this.group_details = response;
+        this.managersList = response['managers'];
       },
       error => {}
     );
@@ -68,6 +111,10 @@ export class GroupDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.getManagerList();
+    this._route.params.subscribe(param => {
+      this.group_id = param['id'];
+      this.getGroupDetails();
+    });
   }
 
 }
