@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { ProjectService } from 'src/app/services/project.service';
 
 @Component({
   selector: 'app-processing',
@@ -8,19 +10,24 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ProcessingComponent implements OnInit {
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _route: ActivatedRoute,
+      private _http: HttpClient,
+      private _project: ProjectService) { }
+    
+    
     isCollapsed = false;
-
-    availableFiles = [
-        'data_nob.csv',
-        'data_s3.csv',
-        'data_s3e.csv',
-        'dataa.csv',
-        'h_data.csv',
-        'v_data.csv',
-    ];
+    project_id = null;
+    project_details = null;
     currentChartDataIndex = null;
-
+    // availableFiles = [
+    //     'data_nob.csv',
+    //     'data_s3.csv',
+    //     'data_s3e.csv',
+    //     'dataa.csv',
+    //     'h_data.csv',
+    //     'v_data.csv',
+    // ];
+    filesList = [];
     chartData = null;
 
     toggleCollapsed(): void {
@@ -33,7 +40,7 @@ export class ProcessingComponent implements OnInit {
                 this.currentChartDataIndex = -1;
                 // return;
             }
-            if (this.currentChartDataIndex === this.availableFiles.length - 1) {
+            if (this.currentChartDataIndex === this.filesList.length - 1) {
                 return;
             }
             this.currentChartDataIndex = this.currentChartDataIndex + 1;
@@ -50,8 +57,32 @@ export class ProcessingComponent implements OnInit {
             this.currentChartDataIndex = index;
         }
 
-        const fileName = this.availableFiles[this.currentChartDataIndex];
-        this._http.get(`assets/chart-data/${fileName}`, {responseType: 'text'})
+        this.readFileData(this.currentChartDataIndex);
+    }
+
+    // readFileData(index) {
+    //     const fileName = this.availableFiles[index];
+    //     this._http.get(`assets/chart-data/${fileName}`, {responseType: 'text'})
+    //         .subscribe(
+    //             response => {
+    //                 // console.log(response);
+    //                 this.chartData = {
+    //                     data: response,
+    //                     type: {
+    //                         curveNumber: 1,
+    //                         xDataType: 'date'
+    //                     }
+    //                 };
+    //             },
+    //             error => {
+    //                 // console.log('**', error);
+    //             }
+    //         );
+    // }
+
+    readFileData(index) {
+        const fileUrl = this.filesList[index]['file'];
+        this._http.get(fileUrl, {responseType: 'text'})
             .subscribe(
                 response => {
                     // console.log(response);
@@ -69,8 +100,21 @@ export class ProcessingComponent implements OnInit {
             );
     }
 
-    ngOnInit() {
+    getProjectDetails() {
+        this._project.getSingleProject(this.project_id).subscribe(
+            response => {
+                this.project_details = response;
+                this.filesList = response['files'];
+            },
+          error => {}
+        );
+    }
 
+    ngOnInit() {
+        this._route.params.subscribe(param => {
+            this.project_id = param['id'];
+            this.getProjectDetails();
+        });
     }
 
 }

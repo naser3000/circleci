@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ProjectService } from 'src/app/services/project.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,43 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-    constructor() { }
+    constructor(private _project: ProjectService) { }
 
-    userProjects = [
-        {
-            id: 1,
-            name: 'Project 1',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-        {
-            id: 2,
-            name: 'Project 2',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-        {
-            id: 3,
-            name: 'Project 3',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-        {
-            id: 3,
-            name: 'Project 3',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-        {
-            id: 4,
-            name: 'Project 4',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-        {
-            id: 5,
-            name: 'Project 5',
-            desc: 'Lorem ipsum dolor sit amet consectetur, adipisicing ...'
-        },
-    ];
+    userProjects: any = [];
+
+    getProjectList() {
+        this._project.getAllProjects().subscribe(
+            response => {
+                this.userProjects = response;
+            },
+            error => {}
+        );
+    }
  
     ngOnInit() {
-
+        this.getProjectList();
     }
 
 }

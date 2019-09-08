@@ -32,7 +32,7 @@
     class="project-desc"
     *ngIf="currentChartDataIndex === null">
     <p>
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Autem, magni quos, dolor voluptatibus similique impedit asperiores sunt totam corporis nihil, doloremque iste consectetur saepe id aspernatur dolorem dolore consequuntur laboriosam.
+      {{ project_details?.description }}
     </p>
   </div>
   <app-chart
@@ -52,7 +52,7 @@
   <button
     nz-button
     [nzType]="'primary'"
-    [disabled]="currentChartDataIndex === availableFiles.length - 1"
+    [disabled]="currentChartDataIndex === filesList?.length - 1"
     (click)="setChartData('next')">
     Next
     <i nz-icon type="right"></i>
