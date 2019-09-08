@@ -30,6 +30,52 @@ export class UsersComponent implements OnInit {
   managersList: any = [];
   annotatorsList: any = [];
 
+  selectedManagers = [];
+  selectedAnnotators = [];
+
+  addManagerModalShow = false;
+  addAnnotatorModalShow = false;
+  
+  deletedCount = 0;
+  deletedItemType = null;
+  deleteModalShow = false;
+
+
+  showDeleteModal(count, type) {
+    this.deletedCount = count;
+    this.deletedItemType = type;
+    this.deleteModalShow = true;
+  }
+
+  closeDeleteModal() {
+    this.deleteModalShow = false;
+  }
+
+  deleteSelectedItem() {
+    const deleted = [];
+    switch (this.deletedItemType) {
+      case 'managers':
+        this.managersList = this.managersList.filter(item => !this.selectedManagers.includes(item.id));
+        this.selectedManagers = [];
+        break;
+      case 'annotators':
+          this.annotatorsList = this.annotatorsList.filter(item => !this.selectedAnnotators.includes(item.id));
+          this.selectedAnnotators = [];
+        break;
+      default:
+        break;
+      }
+      this.closeDeleteModal();
+  }
+
+  addManager(value) {
+
+  }
+
+  addAnnotator(value) {
+
+  }
+
   getManagerList() {
     this._manager.getAllManagers().subscribe(
       response => {

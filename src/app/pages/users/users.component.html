@@ -1,8 +1,27 @@
 <div>
   <h3>Mangers</h3>
+  <div class="operate">
+    <button
+      nz-button
+      [nzType]="'primary'"
+      (click)="addManagerModalShow = true">
+      <i nz-icon type="plus"></i>
+      <span>Add New</span>
+    </button>
+    <span *ngIf="selectedManagers.length">
+      <button
+        nz-button
+        [nzType]="'danger'"
+        (click)="showDeleteModal(selectedManagers.length, 'managers')">
+        <i nz-icon type="delete"></i>
+        <span>Delete {{ selectedManagers.length }} item(s)</span>
+      </button>
+    </span>
+  </div>
   <app-table
     [getTableRowData]="managersList"
-    [tableHeaderData]="managerFields">
+    [tableHeaderData]="managerFields"
+    [(itemSelected)]="selectedManagers">
     <ng-template let-data>
       <td>
           <a [routerLink]="data?.id">
@@ -37,9 +56,28 @@
     </ng-template>
   </app-table>
   <h3>Annotators</h3>
+  <div class="operate">
+    <button
+      nz-button
+      [nzType]="'primary'"
+      (click)="addAnnotatorModalShow = true">
+      <i nz-icon type="plus"></i>
+      <span>Add New</span>
+    </button>
+    <span *ngIf="selectedAnnotators.length">
+      <button
+        nz-button
+        [nzType]="'danger'"
+        (click)="showDeleteModal(selectedAnnotators.length, 'annotators')">
+        <i nz-icon type="delete"></i>
+        <span>Delete {{ selectedAnnotators.length }} item(s)</span>
+      </button>
+    </span>
+  </div>
   <app-table
     [getTableRowData]="annotatorsList"
-    [tableHeaderData]="annotatorFields">
+    [tableHeaderData]="annotatorFields"
+    [(itemSelected)]="selectedAnnotators">
     <ng-template let-data>
       <td>
           <a [routerLink]="data?.id">
@@ -69,3 +107,20 @@
     </ng-template>
   </app-table>
 </div>
+<app-add-manager
+  [(isModalVisible)]="addManagerModalShow"
+  [usernameList]="managerList"
+  (submitedValue)="addManager($event)">
+</app-add-manager>
+<app-add-annotator
+  [(isModalVisible)]="addAnnotatorModalShow"
+  [usernameList]="annotatorList"
+  (submitedValue)="addAnnotator($event)">
+</app-add-annotator>
+<nz-modal
+  [(nzVisible)]="deleteModalShow"
+  nzTitle="Delete {{ deletedItemType }}"
+  (nzOnCancel)="closeDeleteModal()"
+  (nzOnOk)="deleteSelectedItem()">
+  <p>Are you sure for delete {{ deletedCount }} {{ deletedItemType }} from database?</p>
+</nz-modal>
