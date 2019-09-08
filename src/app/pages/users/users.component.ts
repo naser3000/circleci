@@ -127,7 +127,7 @@ export class UsersComponent implements OnInit {
     };
     this._manager.addNewManager(data).subscribe(
       response => {
-        this.annotatorsList = [...this.managersList, response];
+        this.managersList = [...this.managersList, response];
       },
       error => {}
     );
