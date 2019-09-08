@@ -1,54 +1,73 @@
 <nz-modal
   [(nzVisible)]="showModal"
-  nzTitle="Add user to project"
-  nzMaskClosable="false"
-  [nzOkText]="null"
-  (nzOnCancel)="closeModal()">
-  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event, validateForm.value)">
+  nzTitle="Add new annotator"
+  (nzOnCancel)="closeModal()"
+  [nzOkText]="null">
+  <form
+    nz-form
+    [formGroup]="validateForm"
+    (ngSubmit)="submitForm($event, validateForm.value)">
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Username</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
-        <span class="example-input">
-          <input
-            nz-input
-            placeholder="Username"
-            formControlName="username"
-            [nzAutocomplete]="auto"
-          />
-          <nz-autocomplete nzBackfill #auto>
-            <nz-auto-option *ngFor="let option of usernameList" [nzValue]="option?.id">
-              {{ option?.name }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </span>
+        <input nz-input formControlName="username" placeholder="Username" type="text" />
         <nz-form-explain
           *ngIf="validateForm.get('username')?.dirty && validateForm.get('username')?.hasError('required')">
-          Please input Project Name
+          Please input Username
         </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>E-mail</nz-form-label>
+      <nz-form-label [nzSpan]="7" nzRequired>Email</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
-        <input nz-input
-          formControlName="email"
-          placeholder="email"
-          type="email" />
-        <nz-form-explain *ngIf="validateForm.get('email')?.dirty && validateForm.get('email')?.errors">
-          <ng-container *ngIf="validateForm.get('email')?.hasError('email')">
-            The input is not valid E-mail!
-          </ng-container>
-          <ng-container *ngIf="validateForm.get('email')?.hasError('required')">
-            Please input your E-mail!
-          </ng-container>
+        <input nz-input formControlName="email" placeholder="email" type="text" />
+        <nz-form-explain
+          *ngIf="validateForm.get('email')?.dirty && validateForm.get('email')?.hasError('required')">
+          Please input Email
         </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-control [nzSpan]="8" [nzOffset]="4">
-        <label nz-checkbox formControlName="invitation" (ngModelChange)="invitationChange($event)"
-          >Invite via Email</label
-        >
+      <nz-form-label [nzSpan]="7" nzRequired>First Name</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <input nz-input formControlName="firstName" placeholder="First Name" type="text" />
+        <nz-form-explain
+          *ngIf="validateForm.get('firstName')?.dirty && validateForm.get('firstName')?.hasError('required')">
+          Please input First Name
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Last Name</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <input nz-input formControlName="lastName" placeholder="Last Name" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Company Role</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <input nz-input formControlName="companyRole" placeholder="Company Role" type="text" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Price</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <nz-input-number
+          formControlName="price"
+          [nzStep]="1"
+          [nzPlaceHolder]="'Price per annotator'"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Status</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-select style="width: 120px;" formControlName="status" nzPlaceHolder="Status">
+          <nz-option nzValue="H" nzLabel="hold"></nz-option>
+          <nz-option nzValue="A" nzLabel="active"></nz-option>
+          <nz-option nzValue="R" nzLabel="removed"></nz-option>
+          <nz-option nzValue="C" nzLabel="canceled"></nz-option>
+        </nz-select>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>

@@ -11,14 +11,14 @@ export class AddAnnotatorComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group({
       username: ['', [Validators.required]],
-      email: ['', [Validators.email, Validators.required]],
-      invitation: [false]
+      email: ['', [Validators.required, Validators.email]],
+      firstName: [''],
+      lastName: [''],
+      companyRole: [''],
+      status: ['A']
     });
-    this.validateForm.get('email')!.disable();
   }
-  emailInvitation = false;
-  showModal = false
-  @Input() usernameList: string[] = [];
+  showModal = false;
   @Output() isModalVisibleChange: EventEmitter<string> = new EventEmitter<string>();
   @Input() set isModalVisible(value) {
     this.showModal = value;
@@ -32,7 +32,9 @@ export class AddAnnotatorComponent implements OnInit {
       this.validateForm.controls[key].markAsDirty();
       this.validateForm.controls[key].updateValueAndValidity();
     }
+    // console.log(value);
     this.submitedValue.emit(value);
+    this.isModalVisible = false;
     this.resetForm(null);
   };
 
@@ -46,27 +48,6 @@ export class AddAnnotatorComponent implements OnInit {
       this.validateForm.controls[key].markAsPristine();
       this.validateForm.controls[key].updateValueAndValidity();
     }
-  }
-
-  invitationChange(invitation: boolean): void {
-    // this.emailInvitation = invitation;
-    if (invitation) {
-      this.validateForm.get('username')!.clearValidators();
-      this.validateForm.get('username')!.markAsPristine();
-      this.validateForm.get('username')!.disable();
-      this.validateForm.get('email')!.setValidators([Validators.required, Validators.email]);
-      this.validateForm.get('email')!.markAsDirty();
-      this.validateForm.get('email')!.enable();
-    } else {
-      this.validateForm.get('email')!.clearValidators();
-      this.validateForm.get('email')!.markAsPristine();
-      this.validateForm.get('email')!.disable();
-      this.validateForm.get('username')!.setValidators([Validators.required]);
-      this.validateForm.get('username')!.markAsDirty();
-      this.validateForm.get('username')!.enable();
-    }
-    this.validateForm.get('username')!.updateValueAndValidity();
-    this.validateForm.get('email')!.updateValueAndValidity();
   }
 
   closeModal() {

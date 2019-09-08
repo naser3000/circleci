@@ -109,12 +109,10 @@
 </div>
 <app-add-manager
   [(isModalVisible)]="addManagerModalShow"
-  [usernameList]="managerList"
   (submitedValue)="addManager($event)">
 </app-add-manager>
 <app-add-annotator
   [(isModalVisible)]="addAnnotatorModalShow"
-  [usernameList]="annotatorList"
   (submitedValue)="addAnnotator($event)">
 </app-add-annotator>
 <nz-modal

@@ -7,7 +7,8 @@ import {
   NzFormModule,
   NzAutocompleteModule,
   NzCheckboxModule,
-  NzInputModule } from 'ng-zorro-antd';
+  NzInputModule, 
+  NzSelectModule} from 'ng-zorro-antd';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -23,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     NzCheckboxModule,
     NzInputModule,
     NzAutocompleteModule,
+    NzSelectModule
   ],
   exports: [
     AddAnnotatorComponent

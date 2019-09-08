@@ -5,9 +5,10 @@ import {
   NzModalModule,
   NzButtonModule,
   NzFormModule,
-  NzAutocompleteModule,
   NzCheckboxModule,
-  NzInputModule } from 'ng-zorro-antd';
+  NzInputModule, 
+  NzSelectModule,
+  NzInputNumberModule} from 'ng-zorro-antd';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NzFormModule,
     NzCheckboxModule,
     NzInputModule,
-    NzAutocompleteModule,
+    NzSelectModule,
+    NzInputNumberModule
   ],
   exports: [
     AddManagerComponent
