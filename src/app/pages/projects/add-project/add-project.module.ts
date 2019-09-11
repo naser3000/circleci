@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddProjectComponent } from './add-project.component';
-import { NzIconModule, NzModalModule, NzButtonModule, NzFormModule, NzInputModule, NzAutocompleteModule, NzDatePickerModule } from 'ng-zorro-antd';
+import { NzIconModule, NzModalModule, NzButtonModule, NzFormModule, NzInputModule, NzDatePickerModule, NzSelectModule } from 'ng-zorro-antd';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -16,8 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NzFormModule,
     ReactiveFormsModule,
     NzInputModule,
-    NzAutocompleteModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzSelectModule
   ],
   exports: [
     AddProjectComponent

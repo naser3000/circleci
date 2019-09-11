@@ -156,6 +156,9 @@ export class ProjectDetailsComponent implements OnInit {
   }
 
   addUser(value) {
+    if (!value) {
+      return;
+    }
     if (this.addUserType === 'manager') {
       // this.availableUser = this.managerList;
       this.selectedManagers = [];

@@ -8,22 +8,15 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Username</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
-        <span class="example-input">
-          <input
-            nz-input
-            placeholder="Username"
-            formControlName="username"
-            [nzAutocomplete]="auto"
-          />
-          <nz-autocomplete nzBackfill #auto>
-            <nz-auto-option *ngFor="let option of usernameList" [nzValue]="option?.id">
-              {{ option?.name }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </span>
+        <nz-select formControlName="username" nzPlaceHolder="Username">
+          <nz-option
+            [nzLabel]="option?.name"
+            [nzValue]="option?.id"
+            *ngFor="let option of usernameList"></nz-option>
+        </nz-select>
         <nz-form-explain
           *ngIf="validateForm.get('username')?.dirty && validateForm.get('username')?.hasError('required')">
-          Please input Project Name
+          Please select a user
         </nz-form-explain>
       </nz-form-control>
     </nz-form-item>
