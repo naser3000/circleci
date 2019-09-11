@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  rootURL: ''
+  rootURL: 'https://chart-tagging-backend.herokuapp.com'
 };
