@@ -20,6 +20,7 @@ export class ChartComponent implements OnInit {
 
     @Input() tagList = [];
     @Input() set getData(dataObj) {
+        this.resetChart();
         // data is csv file dat
         if (!dataObj) {
             return;
@@ -35,18 +36,12 @@ export class ChartComponent implements OnInit {
             xDataType = dataObj.type.xDataType;
         }
         
-        // clear selected erea
-        const canvas = <HTMLCanvasElement>document.getElementById('chartJSContainer');
-        if (this.selectionContext) {
-            this.selectionContext.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        ///
         const lines = data.split(/\r\n|\n|\r/);
         // timestamp = [];
         // datasets = [];
         this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
-        this.chartConfig.data.labels = [];
-        this.chartConfig.data.datasets[0].data = [];
+        // this.chartConfig.data.labels = [];
+        // this.chartConfig.data.datasets[0].data = [];
         if (curveNumber > 1) {
             for (let col=2; col <= curveNumber; col++) {
                 const dataSet: any = {
@@ -279,6 +274,27 @@ export class ChartComponent implements OnInit {
     startIndex = 0;
     endIndex = 0;
     selectedArea = [];
+
+    resetChart() {
+        // clear selected erea
+        const canvas = <HTMLCanvasElement>document.getElementById('chartJSContainer');
+        if (this.selectionContext) {
+            this.selectionContext.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        this.selectedArea = [];
+        this.savedAllArea = {};
+        this.chartConfig.data.labels = [];
+        this.chartConfig.data.datasets = [{
+            label: '# No curve',
+            data: [],
+            borderWidth: 1,
+            borderColor: 'blue',
+            backgroundColor: 'transparent',
+        }];
+        if (this.chart) {
+            this.chart.update();
+        }
+    }
 
 
     createChart() {
