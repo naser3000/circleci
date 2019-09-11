@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --aot --prod",
+    "postinstall": "ng build --aot --prod --c=dev",
     "deploy": "git add . && git commit -m \"dashboard added (deploy on heroku)\" && git push heroku master"
   },
   "private": true,
