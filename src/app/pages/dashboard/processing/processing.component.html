@@ -37,7 +37,8 @@
   </div>
   <app-chart
     *ngIf="currentChartDataIndex !== null"
-    [getData]="chartData">
+    [getData]="chartData"
+    [tagList]="project_details?.tags">
   </app-chart>
 </div>
 <div class="next-prev-actions">

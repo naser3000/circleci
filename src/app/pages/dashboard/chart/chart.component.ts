@@ -18,6 +18,7 @@ export class ChartComponent implements OnInit {
     addFileModalShow = false;
     lineColors = ['blue', 'red', 'green', 'orange', 'brown', 'black', 'yellow', 'darkblue', 'darkcyan', 'darkgreen'];
 
+    @Input() tagList = [];
     @Input() set getData(dataObj) {
         // data is csv file dat
         if (!dataObj) {
