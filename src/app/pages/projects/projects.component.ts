@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/services/project.service';
 import { GroupService } from 'src/app/services/group.service';
+import { AnnotatorService } from 'src/app/services/annotator.service';
+import { ProjectFileService } from 'src/app/services/project-file.service';
 
 @Component({
   selector: 'app-projects',
@@ -10,7 +12,9 @@ import { GroupService } from 'src/app/services/group.service';
 export class ProjectsComponent implements OnInit {
 
   constructor(private _project: ProjectService,
-    private _group: GroupService) { }
+    private _group: GroupService,
+    private _annotator: AnnotatorService,
+    private _proj_file: ProjectFileService) { }
   
   uploadResult = null;
   isModalVisible = false;
@@ -30,9 +34,8 @@ export class ProjectsComponent implements OnInit {
   }
 
   projectsList: any = [];
-
-  managerList: string[] = ['manager1', 'manager2', 'manager3', 'manager4', 'manager5'];
-  annotatorList: string[] = ['annotator1', 'annotator2', 'annotator3', 'annotator4', 'annotator5'];
+  managerList: any = [];
+  annotatorList: any = [];
 
   closeModal() {
     this.isModalVisible = false;
@@ -75,21 +78,52 @@ export class ProjectsComponent implements OnInit {
   }
 
   addUser(value) {
-    console.log(value);
+    if (!value) {
+      return;
+    }
     if (this.addUserType === 'manager') {
       // this.availableUser = this.managerList;
+      this.selectedProjects = [];
     } else if (this.addUserType === 'annotator') {
-      // this.availableUser = this.annotatorList;
+      let data = {};
+      const selectedP = this.projectsList.filter(project => this.selectedProjects.includes(project.id));
+
+      selectedP.forEach(project => {
+        data = {
+          annotator_ids: [...project.annotators, value.username]
+        };
+        this._project.editProject(data, project.id).subscribe(
+          response => {
+            project['annotators'] = response['annotator_ids'];
+          },
+          error => {},
+        );
+      });
     }
     this.addUserType = null;
     this.addUserModalShow = false;
-    this.selectedProjects = [];
     this.availableUser = [];
+    this.selectedProjects = [];
   }
 
-  uploadFileToProject(files) {
-    this.selectedProjects = [];
+  uploadFileToProject(files) {    
     if (files) {
+      let data = {};
+      const selectedP = this.projectsList.filter(project => this.selectedProjects.includes(project.id));
+
+      selectedP.forEach(project => {
+
+        const data: FormData = new FormData();
+        data.append('file', files.files[0]);
+        data.append('project', project.id);
+        this._proj_file.addNewProjectFile(data).subscribe(
+          response => {
+            this.uploadResult = 'success';
+          },
+          error => {}
+        );
+      });
+      this.selectedProjects = [];
       this.uploadResult = 'success';
     }
       
@@ -115,9 +149,25 @@ export class ProjectsComponent implements OnInit {
     );
   }
 
+  getAnnotatorList() {
+    this._annotator.getAllAnnotators().subscribe(
+      (response: Array<any>) => {
+        this.annotatorList = response.map(annotator => {
+          const data = {
+            id: annotator.id,
+            name: annotator.user.username
+          };
+          return data;
+        });
+      },
+      error => {}
+    );
+  }
+
   ngOnInit() {
     this.getGroupList();
     this.getProjectList();
+    this.getAnnotatorList();
   }
 
 }

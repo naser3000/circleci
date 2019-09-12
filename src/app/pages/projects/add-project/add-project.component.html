@@ -8,6 +8,7 @@
 <nz-modal
   [(nzVisible)]="isModalVisible"
   nzTitle="Add new project"
+  [nzOkText]="null"
   (nzOnCancel)="closeModal()">
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event, validateForm.value)">
     <nz-form-item>
