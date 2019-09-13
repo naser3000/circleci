@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+import { LoggedInUserGuard } from './services/guard.service';
 
 const routes: Routes = [
   { path: 'login',      loadChildren: './login/login.module#LoginModule' },
-  { path: '',      loadChildren: './pages/pages.module#PagesModule' },
+  { path: '',      loadChildren: './pages/pages.module#PagesModule', canActivate:[LoggedInUserGuard] },
   { path: '**',      redirectTo: '', pathMatch: 'full' },
 ];
 
