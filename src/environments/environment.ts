@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  rootURL: 'http://127.0.0.1:8000'
+  rootURL: 'https://chart-tagging-backend.herokuapp.com'
 };
 
 /*
