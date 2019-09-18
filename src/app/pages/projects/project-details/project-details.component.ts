@@ -190,12 +190,11 @@ export class ProjectDetailsComponent implements OnInit {
         this.selectedFiles = [];
         this.uploadResult = 'success';
       },
-      error => {}
+      error => {
+        this.uploadResult = 'failed';
+      }
     );
-    // this.selectedFiles = [];
-    // if (files) {
-    //   this.uploadResult = 'success';
-    // }
+    this.uploadResult = null;
   }
 
   handleClose(removedTag): void {

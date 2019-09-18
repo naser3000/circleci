@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -20,7 +20,8 @@ export class ProjectFileService {
   }
 
   addNewProjectFile(data) {
-    return this._http.post(this.ROOT_URL, data);
+    const header = new HttpHeaders().set('enctype', 'multipart/form-data')
+    return this._http.post(this.ROOT_URL, data, {headers: header});
   }
 
   deleteProjectFile(id) {

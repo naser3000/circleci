@@ -120,11 +120,13 @@ export class ProjectsComponent implements OnInit {
           response => {
             this.uploadResult = 'success';
           },
-          error => {}
+          error => {
+            this.uploadResult = 'failed';
+          }
         );
       });
       this.selectedProjects = [];
-      this.uploadResult = 'success';
+      this.uploadResult = null;
     }
       
   }

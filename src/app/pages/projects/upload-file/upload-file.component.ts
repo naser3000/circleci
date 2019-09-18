@@ -33,17 +33,16 @@ export class UploadFileComponent implements OnInit {
   @Output() uploadedFileList: EventEmitter<any>  = new EventEmitter();
   @Input() set uploadResult(status) {
     if (status === 'success') {
-      this.uploading = false;
-      this.fileList = [];
       this.msg.success('upload successfully.');
-      setTimeout(() => {
-        this.isModalVisible = false;
-        this.resetForm(null);
-      }, 1000);
     } else if (status === 'failed') {
-      this.uploading = false;
       this.msg.error('upload failed.');
     }
+    this.uploading = false;
+    this.fileList = [];
+    setTimeout(() => {
+      this.isModalVisible = false;
+      this.resetForm(null);
+    }, 1000);
   }
 
 

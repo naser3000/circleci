@@ -42,9 +42,12 @@ export class InterceptorService implements HttpInterceptor {
   addToken(req: HttpRequest<any>): HttpRequest<any> {
 
     let customReq: any;
+    let newHeader = req.headers.set('Authorization', 'Token ' + this._token.getToken());
+    if (!newHeader.get('Content-Type')) {
+      newHeader.set('Content-Type', 'application/json');
+    }
     customReq = req.clone({
-      headers: req.headers.set('Content-Type', 'application/json')
-        .set('Authorization', 'Token ' + this._token.getToken())
+      headers: req.headers.set('Authorization', 'Token ' + this._token.getToken())
     });
     return customReq;
   }
