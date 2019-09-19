@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 
@@ -54,6 +54,33 @@ export class LoggedOutUserGuard implements CanActivate {
             observer.next(true);   
           }
         );
+    });
+    return observable;
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class InvitedUserGuard implements CanActivate {
+
+  constructor(public _auth: AuthService, 
+    private _router: Router) {}
+
+  canActivate(_route: ActivatedRouteSnapshot) {
+    const observable = new Observable<boolean>((observer) => {
+      const data = {
+        token: _route.params['key']
+      };
+      this._auth.registerKeyValidation(data).subscribe(
+        response => {
+          observer.next(true);
+        },
+        error => {
+          observer.next(false);
+          this._router.navigate(['/login']);
+        }
+      );
     });
     return observable;
   }
