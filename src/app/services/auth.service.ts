@@ -14,6 +14,11 @@ export class AuthService {
   loginUser(data) {
     return this._http.post(this.ROOT_URL + 'login/', data);
   }
+  
+
+  registerUser(data) {
+    return this._http.post(environment.rootURL + '/api/v1/registration/', data);
+  }
 
   logoutUser() {
     return this._http.post(this.ROOT_URL + 'logout/', {});

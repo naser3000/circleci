@@ -4,6 +4,7 @@ import { LoggedInUserGuard } from './services/guard.service';
 
 const routes: Routes = [
   { path: 'login',      loadChildren: './login/login.module#LoginModule' },
+  { path: 'register/:key',      loadChildren: './login/register/register.module#RegisterModule' },
   { path: '',      loadChildren: './pages/pages.module#PagesModule', canActivate:[LoggedInUserGuard] },
   { path: '**',      redirectTo: '', pathMatch: 'full' },
 ];
