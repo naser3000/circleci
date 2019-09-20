@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ManagerService } from 'src/app/services/manager.service';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-group-details',
@@ -12,6 +13,7 @@ export class GroupDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
     private _group: GroupService,
+    private _auth: AuthService,
     private _manager: ManagerService) { }
   
   group_id = null;
@@ -70,16 +72,31 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   addUser(value) {
-    const data = {
-      manager_ids: [...this.group_details.manager_ids, value.username]
-    };
-    this._group.editGroup(data, this.group_id).subscribe(
-      response => {
-        this.group_details = response;
-        this.managersList = response['managers'];
-      },
-      error => {},
-    );
+    let data = {};
+    if (value.invitation) {
+      data = {
+        email: value.email,
+        type: 'M',
+        related_id: this.group_id
+      };
+      this._auth.userInvitation(data).subscribe(
+        response => {
+          this.managersList = [...this.managersList, response];
+        },
+        error => {},
+      );
+    } else {
+      data = {
+        manager_ids: [...this.group_details.manager_ids, value.username]
+      };
+      this._group.editGroup(data, this.group_id).subscribe(
+        response => {
+          this.group_details = response;
+          this.managersList = response['managers'];
+        },
+        error => {},
+      );
+    }
     this.selectedManagers = [];
     this.addUserModalShow = false;
   }

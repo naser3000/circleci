@@ -15,6 +15,10 @@ export class AuthService {
     return this._http.post(this.ROOT_URL + 'login/', data);
   }
   
+  userInvitation(data) {
+    return this._http.post(environment.rootURL + '/api/v1/invite-user/', data);
+  }
+  
   registerUser(data) {
     return this._http.post(environment.rootURL + '/api/v1/registration/', data);
   }

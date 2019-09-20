@@ -5,6 +5,7 @@ import { ManagerService } from 'src/app/services/manager.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
 import { ProjectFileService } from 'src/app/services/project-file.service';
 import { ProjectService } from 'src/app/services/project.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-project-details',
@@ -16,6 +17,7 @@ export class ProjectDetailsComponent implements OnInit {
   constructor(private _route: ActivatedRoute,
     private _project: ProjectService,
     private _tag: TagService,
+    private _auth: AuthService,
     private _proj_file: ProjectFileService,
     private _manager: ManagerService,
     private _annotator: AnnotatorService) { }
@@ -159,20 +161,35 @@ export class ProjectDetailsComponent implements OnInit {
     if (!value) {
       return;
     }
+    let data = {};
     if (this.addUserType === 'manager') {
       // this.availableUser = this.managerList;
       this.selectedManagers = [];
     } else if (this.addUserType === 'annotator') {
-      const data = {
-        annotator_ids: [...this.project_details.annotator_ids, value.username]
-      };
-      this._project.editProject(data, this.project_id).subscribe(
-        response => {
-          this.project_details = response;
-          this.annotatorsList = response['annotators'];
-        },
-        error => {},
-      );
+      if (value.invitation) {
+        data = {
+          email: value.email,
+          type: 'A',
+          related_id: this.project_id
+        };
+        this._auth.userInvitation(data).subscribe(
+          response => {
+            this.annotatorsList = [...this.annotatorsList, response];
+          },
+          error => {},
+        );
+      } else {
+        data = {
+          annotator_ids: [...this.project_details.annotator_ids, value.username]
+        };
+        this._project.editProject(data, this.project_id).subscribe(
+          response => {
+            this.project_details = response;
+            this.annotatorsList = response['annotators'];
+          },
+          error => {},
+        );
+      }
       this.selectedAnnotators = [];
     }
     this.addUserType = null;

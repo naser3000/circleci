@@ -3,6 +3,7 @@ import { ProjectService } from 'src/app/services/project.service';
 import { GroupService } from 'src/app/services/group.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
 import { ProjectFileService } from 'src/app/services/project-file.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-projects',
@@ -13,6 +14,7 @@ export class ProjectsComponent implements OnInit {
 
   constructor(private _project: ProjectService,
     private _group: GroupService,
+    private _auth: AuthService,
     private _annotator: AnnotatorService,
     private _proj_file: ProjectFileService) { }
   
@@ -87,18 +89,33 @@ export class ProjectsComponent implements OnInit {
     } else if (this.addUserType === 'annotator') {
       let data = {};
       const selectedP = this.projectsList.filter(project => this.selectedProjects.includes(project.id));
-
-      selectedP.forEach(project => {
-        data = {
-          annotator_ids: [...project.annotators, value.username]
-        };
-        this._project.editProject(data, project.id).subscribe(
-          response => {
-            project['annotators'] = response['annotator_ids'];
-          },
-          error => {},
-        );
-      });
+      if (value.invitation) {
+        selectedP.forEach(project => {
+          data = {
+            email: value.email,
+            type: 'A',
+            related_id: project.id
+          };
+          this._auth.userInvitation(data).subscribe(
+            response => {
+              project['annotators'] = [...project['annotators'], response['id']];
+            },
+            error => {},
+          );
+        });
+      } else {
+        selectedP.forEach(project => {
+          data = {
+            annotator_ids: [...project.annotators, value.username]
+          };
+          this._project.editProject(data, project.id).subscribe(
+            response => {
+              project['annotators'] = response['annotator_ids'];
+            },
+            error => {},
+          );
+        });
+      }
     }
     this.addUserType = null;
     this.addUserModalShow = false;
