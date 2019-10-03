@@ -28,7 +28,35 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>First Name</nz-form-label>
+      <nz-form-label [nzSpan]="7" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback>
+        <input
+          nz-input
+          type="password"
+          formControlName="password"
+          placeholder="Password"/>
+        <nz-form-explain
+          *ngIf="validateForm.get('password')?.dirty && validateForm.get('password')?.errors">
+          Please input your Password!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7" nzRequired>Confirm Password</nz-form-label>
+      <nz-form-control [nzSpan]="12" nzHasFeedback [class.has-error]="validateForm.hasError('notSame')">
+        <input
+          nz-input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="confirm Password"/>
+        <nz-form-explain
+          *ngIf="validateForm.hasError('notSame')">
+          Passwords do not match!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">First Name</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
         <input nz-input formControlName="firstName" placeholder="First Name" type="text" />
         <nz-form-explain
@@ -50,7 +78,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="7">Price</nz-form-label>
+      <nz-form-label [nzSpan]="7" nzRequired>Price</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
         <nz-input-number
           formControlName="price"
@@ -60,7 +88,7 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="7">Status</nz-form-label>
+      <nz-form-label [nzSpan]="7" nzRequired>Status</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <nz-select style="width: 120px;" formControlName="status" nzPlaceHolder="Status">
           <nz-option nzValue="H" nzLabel="hold"></nz-option>

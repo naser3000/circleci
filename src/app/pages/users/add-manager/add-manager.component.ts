@@ -9,15 +9,20 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class AddManagerComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
-    this.validateForm = this.fb.group({
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      firstName: [''],
-      lastName: [''],
-      companyRole: [''],
-      price: [''],
-      status: ['A']
-    });
+    this.validateForm = this.fb.group(
+      {
+        username: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: [null, [Validators.required]],
+        confirmPassword: [null],
+        firstName: [''],
+        lastName: [''],
+        companyRole: [''],
+        price: [0, [Validators.required]],
+        status: ['A', [Validators.required]],
+      },
+      {validator: this.checkPasswords}
+    );
   }
   showModal = false;
   @Output() isModalVisibleChange: EventEmitter<string> = new EventEmitter<string>();
@@ -27,6 +32,14 @@ export class AddManagerComponent implements OnInit {
   }
   @Output() submitedValue: EventEmitter<any> = new EventEmitter();
   validateForm: FormGroup;
+
+  checkPasswords(group: FormGroup) {
+    let pass = group.get('password').value;
+    let confirmPass = group.get('confirmPassword').value;
+  
+    return pass === confirmPass ? null : { notSame: true }     
+  }
+
   submitForm = ($event: any, value: any) => {
     $event.preventDefault();
     for (const key in this.validateForm.controls) {
@@ -49,6 +62,10 @@ export class AddManagerComponent implements OnInit {
       this.validateForm.controls[key].markAsPristine();
       this.validateForm.controls[key].updateValueAndValidity();
     }
+    this.validateForm.controls['price'].setValue(0);
+    this.validateForm.controls['status'].setValue('A');
+    this.validateForm.controls['firstName'].setValue('');
+    this.validateForm.controls['lastName'].setValue('');
   }
 
   closeModal() {

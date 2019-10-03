@@ -118,6 +118,7 @@ export class UsersComponent implements OnInit {
       user: {
         username: value['username'],
         email: value['email'],
+        password: value['password'],
         first_name: value['firstName'],
         last_name: value['lastName'],
       },
@@ -141,6 +142,7 @@ export class UsersComponent implements OnInit {
       user: {
         username: value['username'],
         email: value['email'],
+        password: value['password'],
         first_name: value['firstName'],
         last_name: value['lastName'],
       },
