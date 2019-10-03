@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectService } from 'src/app/services/project.service';
 import { GroupService } from 'src/app/services/group.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
 import { ProjectFileService } from 'src/app/services/project-file.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss']
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
 
   constructor(private _project: ProjectService,
     private _group: GroupService,
     private _auth: AuthService,
     private _annotator: AnnotatorService,
-    private _proj_file: ProjectFileService) { }
+    private _proj_file: ProjectFileService,
+    private _shared: SharedService) { }
   
   uploadResult = null;
   isModalVisible = false;
@@ -26,6 +28,8 @@ export class ProjectsComponent implements OnInit {
   availableGroup: any = [];
   availableUser = [];
   selectedProjects = [];
+  shared_sub;
+  current_user;
 
   tableHeaderData: any = {
     name: 'Project Name',
@@ -186,10 +190,27 @@ export class ProjectsComponent implements OnInit {
     );
   }
 
+  getUserType() {
+    this.shared_sub = this._shared.currentUser.subscribe(
+      user => {
+        this.current_user = user;
+        if (user && user['type'] === 'Admin') {
+          this.getGroupList();
+        }
+        this.getProjectList();
+        this.getAnnotatorList();
+      }
+    );
+  }
+
   ngOnInit() {
-    this.getGroupList();
-    this.getProjectList();
-    this.getAnnotatorList();
+    this.getUserType();
+  }
+
+  ngOnDestroy() {
+    if (this.shared_sub) {
+      this.shared_sub.unsubscribe();
+    }
   }
 
 }

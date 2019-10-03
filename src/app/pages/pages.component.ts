@@ -40,10 +40,20 @@ export class PagesComponent implements OnInit {
     this._auth.getUserInfo().subscribe(
       response => {
         this.currentUser = response;
-        this._shared.changeUser(response);
+        // this._shared.changeUser(response);
       },
-      error => {}
+      error => {},
+      () => {
+        this._auth.getUserType().subscribe(
+          response => {
+            this.currentUser['type'] = response['user_type'];
+            this._shared.changeUser(this.currentUser);
+          },
+          error => {}
+        );
+      }
     );
+    
   }
 
   ngOnInit() {

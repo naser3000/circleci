@@ -1,9 +1,10 @@
 <div class="operate">
   <app-add-project
+    *ngIf="current_user?.type === 'Admin'"
     [groupOptions]="availableGroup"
     (submitedValue)="addProject($event)">
   </app-add-project>
-  <span>
+  <span class="actions">
     <nz-dropdown [nzDisabled]="selectedProjects.length === 0">
       <button nz-button nz-dropdown>
         <span>Actions</span>
@@ -30,12 +31,14 @@
             (uploadedFileList)="uploadFileToProject($event)">
           </app-upload-file>
         </li>
-        <li nz-menu-divider></li>
-        <li nz-menu-item>
-          <a (click)="isModalVisible = true">
-            Delete Project
-          </a>
-        </li>
+        <ng-container *ngIf="current_user?.type === 'Admin'">
+          <li nz-menu-divider></li>
+          <li nz-menu-item>
+            <a (click)="isModalVisible = true">
+              Delete Project
+            </a>
+          </li>
+        </ng-container>
       </ul>
     </nz-dropdown>
     <span *ngIf="selectedProjects.length">Selected {{ selectedProjects.length }} items</span>

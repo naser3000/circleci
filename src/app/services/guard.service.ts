@@ -85,3 +85,61 @@ export class InvitedUserGuard implements CanActivate {
     return observable;
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AdminGuard implements CanActivate {
+
+  constructor(public _auth: AuthService,
+    private _router: Router) {}
+
+  canActivate(_route: ActivatedRouteSnapshot) {
+    const observable = new Observable<boolean>((observer) => {
+      this._auth.getUserType().subscribe(
+        response => {
+          if (response['user_type'] === 'Admin') {
+            observer.next(true);
+          } else {
+            observer.next(false);
+            this._router.navigate(['']);
+          }
+        },
+        error => {
+          observer.next(false);
+          this._router.navigate(['']);
+        }
+      );
+    });
+    return observable;
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ManagerGuard implements CanActivate {
+
+  constructor(public _auth: AuthService,
+    private _router: Router) {}
+
+  canActivate(_route: ActivatedRouteSnapshot) {
+    const observable = new Observable<boolean>((observer) => {
+      this._auth.getUserType().subscribe(
+        response => {
+          if (response['user_type'] === 'Manager' || response['user_type'] === 'Admin') {
+            observer.next(true);
+          } else {
+            observer.next(false);
+            this._router.navigate(['']);
+          }
+        },
+        error => {
+          observer.next(false);
+          this._router.navigate(['']);
+        }
+      );
+    });
+    return observable;
+  }
+}

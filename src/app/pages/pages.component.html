@@ -25,7 +25,8 @@
       <li nz-menu-item
         nz-tooltip
         nzPlacement="right"
-        [nzTitle]="isCollapsed ? 'Projects' : ''">
+        [nzTitle]="isCollapsed ? 'Projects' : ''"
+        *ngIf="['Admin', 'Manager'].includes(currentUser?.type)">
         <a title
           routerLink="/projects">
           <i nz-icon type="appstore"></i>
@@ -35,7 +36,8 @@
       <li nz-menu-item
         nz-tooltip
         nzPlacement="right"
-        [nzTitle]="isCollapsed ? 'Users' : ''">
+        [nzTitle]="isCollapsed ? 'Users' : ''"
+        *ngIf="currentUser?.type === 'Admin'">
         <a title
           routerLink="/users">
           <i nz-icon type="team"></i>
@@ -54,7 +56,8 @@
       <li nz-menu-item
         nz-tooltip
         nzPlacement="right"
-        [nzTitle]="isCollapsed ? 'Setting' : ''">
+        [nzTitle]="isCollapsed ? 'Setting' : ''"
+        *ngIf="currentUser?.type === 'Admin'">
         <a title
           routerLink="/settings">
           <i nz-icon type="setting"></i>

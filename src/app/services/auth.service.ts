@@ -26,6 +26,10 @@ export class AuthService {
   registerKeyValidation(data) {
     return this._http.post(environment.rootURL + '/api/v1/check-invitation/', data);
   }
+  
+  getUserType() {
+    return this._http.get(environment.rootURL + '/api/v1/user-type/');
+  }
 
   logoutUser() {
     return this._http.post(this.ROOT_URL + 'logout/', {});
