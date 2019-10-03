@@ -125,7 +125,7 @@ export class ProjectsComponent implements OnInit {
 
   uploadFileToProject(files) {    
     if (files) {
-      let data = {};
+      // let data = {};
       const selectedP = this.projectsList.filter(project => this.selectedProjects.includes(project.id));
 
       selectedP.forEach(project => {
@@ -133,6 +133,9 @@ export class ProjectsComponent implements OnInit {
         const data: FormData = new FormData();
         data.append('file', files.files[0]);
         data.append('project', project.id);
+        data.append('data_type', files.type['xDataType']);
+        data.append('curves_count', files.type['curveNumber']);
+        data.append('is_horizontal', files.type['isHorizontal']);
         this._proj_file.addNewProjectFile(data).subscribe(
           response => {
             this.uploadResult = 'success';

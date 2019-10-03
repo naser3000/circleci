@@ -89,8 +89,9 @@ export class ProcessingComponent implements OnInit {
                     this.chartData = {
                         data: response,
                         type: {
-                            curveNumber: 1,
-                            xDataType: 'date'
+                            curveNumber: this.filesList[index]['curves_count'],
+                            xDataType: this.filesList[index]['data_type'],
+                            isHorizontal: this.filesList[index]['is_horizontal'],
                         }
                     };
                 },

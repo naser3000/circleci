@@ -8,7 +8,9 @@ import {
   NzButtonModule,
   NzFormModule,
   NzInputNumberModule,
-  NzSelectModule 
+  NzSelectModule, 
+  NzCheckboxModule,
+  NzIconModule
 } from 'ng-zorro-antd';
 
 @NgModule({
@@ -24,6 +26,8 @@ import {
     NzFormModule,
     NzSelectModule,
     NzInputNumberModule,
+    NzCheckboxModule,
+    NzIconModule
   ],
   exports: [
     UploadFileComponent

@@ -4,9 +4,6 @@
   nzMaskClosable="false"
   [nzOkText]="null"
   (nzOnCancel)="closeModal()">
-  <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzMultiple]="true">
-    <button nz-button><i nz-icon nzType="upload"></i><span>Select File</span></button>
-  </nz-upload>
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event, validateForm.value)">
     <nz-form-item>
       <nz-form-label [nzSpan]="7" nzRequired>Number of curves</nz-form-label>
@@ -34,6 +31,29 @@
         <nz-form-explain *ngIf="validateForm.get('xDataType')?.dirty && validateForm.get('xDataType')?.errors">
           Please select data type
         </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Select File</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-upload
+          [(nzFileList)]="fileList"
+          [nzBeforeUpload]="beforeUpload"
+          [nzMultiple]="true">
+          <button nz-button (click)="$event; false">
+            <i nz-icon nzType="upload"></i>
+            <span>Upload</span>
+          </button>
+        </nz-upload>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="7">Horizontal Data</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <label nz-checkbox formControlName="isHorizontal"></label>
+        <!-- <nz-form-explain *ngIf="validateForm.get('isHorizontal')?.dirty && validateForm.get('isHorizontal')?.errors">
+          Please select data type
+        </nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
