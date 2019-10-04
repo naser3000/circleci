@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
 import 'chartjs-plugin-zoom';
@@ -15,10 +15,34 @@ export class ChartComponent implements OnInit {
     chart = null;
     chartWidth = 1000;
     uploadResult = null;
-    addFileModalShow = false;
+    // addFileModalShow = false;
     lineColors = ['blue', 'red', 'green', 'orange', 'brown', 'black', 'yellow', 'darkblue', 'darkcyan', 'darkgreen'];
-
-    @Input() tagList = [];
+    tagsColor = ['#ff0000', '#08ffc8', '#ff00c8', '#f7b71d', '#e42c64'];
+    tagList = [];
+    dataRowsNumber = null;
+    allTagsColor = {};
+    currentTag;
+    currentcolor;
+    @Output() annotatedData = new EventEmitter();
+    // @Input() set dataSender(value: string) {
+    //     console.log('!!!!!', value);
+    //     if (value === 'get') {
+    //         this.annotatedData.emit(this.tagsStatusInfo);
+    //     }
+    // }
+    @Input() set getTagList(value: Array<any>) {
+        this.tagList = value;
+        this.tagList.forEach((tag, i) => {
+            this.allTagsColor[tag.name] = this.tagsColor[i % 5];
+        });
+        if (this.tagList[0]) {
+            this.currentTag = this.tagList[0].name;
+            this.currentcolor = this.allTagsColor[this.currentTag];
+        }
+        if (this.dataRowsNumber) {
+            this.tagsStatusInfo[this.currentTag] = new Array(this.dataRowsNumber).fill(0);
+        }
+    }
     @Input() set getData(dataObj) {
         this.resetChart();
         // data is csv file dat
@@ -37,22 +61,26 @@ export class ChartComponent implements OnInit {
         }
         
         const lines = data.split(/\r\n|\n|\r/);
+        this.dataRowsNumber = lines.length;
         // timestamp = [];
         // datasets = [];
-        this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
+        if (this.currentTag) {
+            this.tagsStatusInfo[this.currentTag] = new Array(lines.length).fill(0);
+        }
         // this.chartConfig.data.labels = [];
         // this.chartConfig.data.datasets[0].data = [];
+        this.chartConfig.data.datasets = [];
+        for (let col=1; col <= curveNumber; col++) {
+            const dataSet: any = {
+                label: `# Curve ${col}`,
+                data: [],
+                borderWidth: 1,
+                borderColor: this.lineColors[col - 1],
+                backgroundColor: 'transparent',
+            };
+            this.chartConfig.data.datasets.push(dataSet);
+        }
         if (curveNumber > 1) {
-            for (let col=2; col <= curveNumber; col++) {
-                const dataSet: any = {
-                    label: `# Curve ${col}`,
-                    data: [],
-                    borderWidth: 1,
-                    borderColor: this.lineColors[col - 1],
-                    backgroundColor: 'transparent',
-                };
-                this.chartConfig.data.datasets.push(dataSet);
-            }
         } else {
             this.chartConfig.data.datasets.splice(1);
         }
@@ -103,7 +131,7 @@ export class ChartComponent implements OnInit {
                 }
             }
         });
-        console.log(this.chartConfig.data);
+        // console.log(this.chartConfig.data);
         if (this.chart) {
             this.chart.update();
         }
@@ -254,17 +282,6 @@ export class ChartComponent implements OnInit {
         //   }
         // });
     // }
-
-
-    allTagsColor = {
-        tag1: '#ff0000',
-        tag2: '#08ffc8',
-        tag3: '#ff00c8',
-        tag4: '#f7b71d',
-        tag5: '#e42c64',
-    };
-    currentTag = 'tag1';
-    currentcolor = this.allTagsColor[this.currentTag];
     savedAllArea = {};
     tagsStatusInfo = {};
     selectionContext = null;
@@ -401,6 +418,7 @@ export class ChartComponent implements OnInit {
             const indexes = this.getSelectedIndex();
             this.tagSelectedArea(indexes);
             console.log('>>>>>>>', this.tagsStatusInfo);
+            this.annotatedData.emit(this.tagsStatusInfo);
             // console.log('implement filter between ' 
             // + options.data.labels[indexes[0]] + ' and ' 
             // + options.data.labels[indexes[1]]);  
@@ -468,7 +486,7 @@ export class ChartComponent implements OnInit {
         }
     }
 
-    setTag(e) {
+    setTag(tag_name) {
         // savedAllArea[currentTag] = selectedArea;
         let tagLength = 0;
         if (this.tagsStatusInfo[this.currentTag]) {
@@ -476,7 +494,7 @@ export class ChartComponent implements OnInit {
         }
         // const v = document.getElementById("select-tag").value;
         // const v = e.target.value;
-        const v = e;
+        const v = tag_name;
         this.currentTag = v;
         this.currentcolor = this.allTagsColor[this.currentTag];
         this.selectionContext.fillStyle = this.currentcolor;
@@ -563,15 +581,15 @@ export class ChartComponent implements OnInit {
         }
     }
 
-    uploadFileToProject(files) {
-        if (files) {
-            this.loadFiles(files.files, files.type);
-            this.uploadResult = 'success';
-            setTimeout(() => {
-                this.uploadResult = null;
-            }, 1);
-        }
-    }
+    // uploadFileToProject(files) {
+    //     if (files) {
+    //         this.loadFiles(files.files, files.type);
+    //         this.uploadResult = 'success';
+    //         setTimeout(() => {
+    //             this.uploadResult = null;
+    //         }, 1);
+    //     }
+    // }
 
     ngOnInit() {
         setTimeout(() => {

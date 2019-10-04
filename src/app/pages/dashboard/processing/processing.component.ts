@@ -19,6 +19,7 @@ export class ProcessingComponent implements OnInit {
     project_id = null;
     project_details = null;
     currentChartDataIndex = null;
+    currentAnnotatedData = null;
     // availableFiles = [
     //     'data_nob.csv',
     //     'data_s3.csv',
@@ -35,6 +36,7 @@ export class ProcessingComponent implements OnInit {
     }
 
     setChartData(index) {
+        this.currentAnnotatedData = null;
         if (index === 'next') {
             if (this.currentChartDataIndex === null) {
                 this.currentChartDataIndex = -1;
@@ -99,6 +101,15 @@ export class ProcessingComponent implements OnInit {
                     // console.log('**', error);
                 }
             );
+    }
+
+    getAnnotatedData(value) {
+        this.currentAnnotatedData = value;
+        setTimeout(() => {
+        }, 500);
+    }
+
+    completeAnnotation() {
     }
 
     getProjectDetails() {

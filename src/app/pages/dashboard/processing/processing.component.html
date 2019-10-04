@@ -38,24 +38,44 @@
   <app-chart
     *ngIf="currentChartDataIndex !== null"
     [getData]="chartData"
-    [tagList]="project_details?.tags">
+    [getTagList]="project_details?.tags"
+    (annotatedData)="getAnnotatedData($event)">
   </app-chart>
 </div>
 <div class="next-prev-actions">
   <button
     nz-button
     [nzType]="'primary'"
-    [disabled]="!currentChartDataIndex"
-    (click)="setChartData('prev')">
-    <i nz-icon type="left"></i>
-    Previos
-  </button>
-  <button
-    nz-button
-    [nzType]="'primary'"
-    [disabled]="currentChartDataIndex === filesList?.length - 1"
+    *ngIf="currentChartDataIndex === null"
     (click)="setChartData('next')">
-    Next
+    Start Annotation
     <i nz-icon type="right"></i>
   </button>
+  <ng-container *ngIf="currentChartDataIndex !== null">
+    <button
+      nz-button
+      [disabled]="!currentAnnotatedData"
+      class="completed-btn"
+      (click)="completeAnnotation()">
+      <i nz-icon type="check-circle-fill"></i>
+      Annotation Completed
+    </button>
+    <button
+      nz-button
+      class="prev-btn"
+      [nzType]="'primary'"
+      [disabled]="!currentChartDataIndex"
+      (click)="setChartData('prev')">
+      <i nz-icon type="left"></i>
+      Save & Previos
+    </button>
+    <button
+      nz-button
+      [nzType]="'primary'"
+      [disabled]="currentChartDataIndex === filesList?.length - 1"
+      (click)="setChartData('next')">
+      Save & Next
+      <i nz-icon type="right"></i>
+    </button>
+  </ng-container>
 </div>
