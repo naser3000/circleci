@@ -33,10 +33,10 @@ export class ChartComponent implements OnInit {
     @Input() set getTagList(value: Array<any>) {
         this.tagList = value;
         this.tagList.forEach((tag, i) => {
-            this.allTagsColor[tag.name] = this.tagsColor[i % 5];
+            this.allTagsColor[tag.id] = this.tagsColor[i % 5];
         });
         if (this.tagList[0]) {
-            this.currentTag = this.tagList[0].name;
+            this.currentTag = this.tagList[0].id;
             this.currentcolor = this.allTagsColor[this.currentTag];
         }
         if (this.dataRowsNumber) {
@@ -394,7 +394,7 @@ export class ChartComponent implements OnInit {
             });
             this.xClickPosition[1] = this.getRelativePosition(evt, chart)['x'];
             this.xNearestPosition[1] = points[0]._view.x;
-            const endIndex = points[0]._index;
+            this.endIndex = points[0]._index;
 
             // save selected area
             const overlappedAreaIndex = [];
@@ -486,7 +486,7 @@ export class ChartComponent implements OnInit {
         }
     }
 
-    setTag(tag_name) {
+    setTag(tag_id) {
         // savedAllArea[currentTag] = selectedArea;
         let tagLength = 0;
         if (this.tagsStatusInfo[this.currentTag]) {
@@ -494,7 +494,7 @@ export class ChartComponent implements OnInit {
         }
         // const v = document.getElementById("select-tag").value;
         // const v = e.target.value;
-        const v = tag_name;
+        const v = tag_id;
         this.currentTag = v;
         this.currentcolor = this.allTagsColor[this.currentTag];
         this.selectionContext.fillStyle = this.currentcolor;

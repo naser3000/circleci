@@ -28,7 +28,7 @@
     [ngModel]="currentTag"
     (ngModelChange)="setTag($event)">
     <nz-option
-      [nzValue]="tag?.name"
+      [nzValue]="tag?.id"
       [nzLabel]="tag?.name"
       *ngFor="let tag of tagList">
     </nz-option>
