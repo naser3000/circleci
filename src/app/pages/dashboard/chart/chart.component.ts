@@ -53,6 +53,10 @@ export class ChartComponent implements OnInit {
             return;
         }
         const data = dataObj.data;
+        this.savedAllArea = dataObj.preSelectedArea;
+        if (this.selectionContext) {
+            this.drawAllRects();
+        }
         let curveNumber = 1;
         let xDataType = null;
         if (dataObj.type) {
@@ -83,6 +87,15 @@ export class ChartComponent implements OnInit {
         if (curveNumber > 1) {
         } else {
             this.chartConfig.data.datasets.splice(1);
+        }
+        const preSetTag = [];
+        const firstRow = lines[0].split(',');
+        for (let col = curveNumber + 1; col < firstRow.length; col++) {
+            if (firstRow[col].includes(':')) {
+                const tag_id = firstRow[col].split(':')[0];
+                preSetTag.push(tag_id);
+                this.tagsStatusInfo[tag_id] = new Array(lines.length).fill(0);
+            }
         }
         lines.forEach((line, index) => {
             const colData = line.split(',');
@@ -128,6 +141,16 @@ export class ChartComponent implements OnInit {
                     // // this.chartConfig.data.labels.push([`${index}---${colData[0]}`]);
                     // this.chartConfig.data.labels.push(Number(colData[0]));
                     this.chartConfig.data.datasets[col - 1].data.push(Number(colData[col]));
+                }
+            }
+            for (let col = curveNumber + 1; col < colData.length; col++) {
+                if ((isNaN(Number(colData[col]))) && index === 0) {
+                    return;
+                }
+                const preSetTagIndex = col - (curveNumber + 1);
+                if (preSetTagIndex < preSetTag.length) {
+                    const column_tag_id = preSetTag[preSetTagIndex];
+                    this.tagsStatusInfo[column_tag_id][index] = colData[col];
                 }
             }
         });
@@ -418,11 +441,18 @@ export class ChartComponent implements OnInit {
             const indexes = this.getSelectedIndex();
             this.tagSelectedArea(indexes);
             console.log('>>>>>>>', this.tagsStatusInfo);
-            this.annotatedData.emit(this.tagsStatusInfo);
+            console.log('>>>>>>>', this.savedAllArea);
+            this.annotatedData.emit({
+                tags: this.tagsStatusInfo,
+                areas: this.savedAllArea
+            });
             // console.log('implement filter between ' 
             // + options.data.labels[indexes[0]] + ' and ' 
             // + options.data.labels[indexes[1]]);  
         });
+        if (Object.keys(this.savedAllArea).length) {
+            this.drawAllRects();
+        }
     }
     drawRects(rectList) {
         const chartArea = this.chart.chartArea;
