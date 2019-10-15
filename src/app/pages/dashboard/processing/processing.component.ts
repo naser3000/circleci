@@ -77,6 +77,7 @@ export class ProcessingComponent implements OnInit {
     }
 
     completeAnnotation() {
+        this.writeAnnotatedData(this.filesList[this.currentChartDataIndex], true);
     }
 
     // readFileData(index) {
@@ -100,34 +101,32 @@ export class ProcessingComponent implements OnInit {
     // }
 
     readFileData(index) {
-        let fileUrl = this.filesList[index]['file'];
-        let selectedArea: any = {};
-        if (this.filesList[index]['annotated_files']) {
-            fileUrl = environment.rootURL + this.filesList[index]['annotated_files']['file'];
-            selectedArea = this.filesList[index]['annotated_files']['selected_area'];
+        const selectedChart = this.filesList[index];
+        let fileUrl = selectedChart['file'];
+        const chartDataForTag = {
+            type: {
+                curveNumber: selectedChart['curves_count'],
+                xDataType: selectedChart['data_type'],
+                isHorizontal: selectedChart['is_horizontal'],
+            }
+        }
+        if (selectedChart['annotated_files']) {
+            fileUrl = environment.rootURL + selectedChart['annotated_files']['file'];
+            let selectedArea = selectedChart['annotated_files']['selected_area'];
             selectedArea = JSON.parse(selectedArea || '{}');
+            chartDataForTag['preSelectedArea'] = selectedArea
         }
         this._http.get(fileUrl, {responseType: 'text'})
             .subscribe(
                 response => {
-                    // console.log(response);
-                    this.chartData = {
-                        data: response,
-                        preSelectedArea: selectedArea,
-                        type: {
-                            curveNumber: this.filesList[index]['curves_count'],
-                            xDataType: this.filesList[index]['data_type'],
-                            isHorizontal: this.filesList[index]['is_horizontal'],
-                        }
-                    };
+                    chartDataForTag['data'] = response;
+                    this.chartData = chartDataForTag;
                 },
-                error => {
-                    // console.log('**', error);
-                }
+                error => {}
             );
     }
 
-    writeAnnotatedData(projectFile) {
+    writeAnnotatedData(projectFile, completed = false) {
         const data = {
             annotated: this.currentAnnotatedData,
             area: JSON.stringify(this.currentSelectedArea),
@@ -136,6 +135,9 @@ export class ProcessingComponent implements OnInit {
         this.currentAnnotatedData = null;
         this.currentSelectedArea = null;
         const anno_file = projectFile['annotated_files'];
+        if (completed) {
+            data['completed'] = true;
+        }
         if (anno_file) {
             this._annotated_file.editAnnotatedFile(data, anno_file.id).subscribe(
                 response => {

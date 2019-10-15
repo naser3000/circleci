@@ -67,14 +67,16 @@
       [disabled]="!currentChartDataIndex"
       (click)="setChartData('prev')">
       <i nz-icon type="left"></i>
-      Save & Previos
+      <span *ngIf="currentAnnotatedData">Save & </span>
+      <span>Previos</span>
     </button>
     <button
       nz-button
       [nzType]="'primary'"
       [disabled]="currentChartDataIndex === filesList?.length - 1"
       (click)="setChartData('next')">
-      Save & Next
+      <span *ngIf="currentAnnotatedData">Save & </span>
+      <span>Next</span>
       <i nz-icon type="right"></i>
     </button>
   </ng-container>

@@ -38,6 +38,9 @@ export class ChartComponent implements OnInit {
         if (this.tagList[0]) {
             this.currentTag = this.tagList[0].id;
             this.currentcolor = this.allTagsColor[this.currentTag];
+            if (this.savedAllArea[this.currentTag]) {
+                this.selectedArea = this.savedAllArea[this.currentTag];
+            }
         }
         if (this.dataRowsNumber) {
             this.tagsStatusInfo[this.currentTag] = new Array(this.dataRowsNumber).fill(0);
@@ -53,9 +56,14 @@ export class ChartComponent implements OnInit {
             return;
         }
         const data = dataObj.data;
-        this.savedAllArea = dataObj.preSelectedArea;
-        if (this.selectionContext) {
-            this.drawAllRects();
+        if (dataObj.preSelectedArea) {
+            this.savedAllArea = dataObj.preSelectedArea;
+            if (this.currentTag) {
+                this.selectedArea = this.savedAllArea[this.currentTag];
+            }
+            if (this.selectionContext) {
+                this.drawAllRects();
+            }
         }
         let curveNumber = 1;
         let xDataType = null;
@@ -152,6 +160,12 @@ export class ChartComponent implements OnInit {
                     const column_tag_id = preSetTag[preSetTagIndex];
                     this.tagsStatusInfo[column_tag_id][index] = colData[col];
                 }
+            }
+            if (Object.keys(this.tagsStatusInfo).length) {    
+                this.annotatedData.emit({
+                    tags: this.tagsStatusInfo,
+                    areas: this.savedAllArea
+                });
             }
         });
         // console.log(this.chartConfig.data);
