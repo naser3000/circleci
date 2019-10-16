@@ -24,6 +24,7 @@ export class ProcessingComponent implements OnInit {
     currentChartDataIndex = null;
     currentAnnotatedData = null;
     currentSelectedArea = null;
+    tggedDataChanged = false;
     // availableFiles = [
     //     'data_nob.csv',
     //     'data_s3.csv',
@@ -40,7 +41,7 @@ export class ProcessingComponent implements OnInit {
     }
 
     setChartData(index) {
-        if (this.currentAnnotatedData) {
+        if (this.tggedDataChanged) {
             this.writeAnnotatedData(this.filesList[this.currentChartDataIndex]);
         }
         if (index === 'next') {
@@ -72,6 +73,9 @@ export class ProcessingComponent implements OnInit {
     getAnnotatedData(value) {
         this.currentAnnotatedData = value['tags'];
         this.currentSelectedArea = value['areas'];
+        if (!value['init']) {
+            this.tggedDataChanged = true;
+        }
         setTimeout(() => {
         }, 500);
     }
@@ -134,6 +138,7 @@ export class ProcessingComponent implements OnInit {
         };
         this.currentAnnotatedData = null;
         this.currentSelectedArea = null;
+        this.tggedDataChanged = false;
         const anno_file = projectFile['annotated_files'];
         if (completed) {
             data['completed'] = true;

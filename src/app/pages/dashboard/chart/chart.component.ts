@@ -161,10 +161,11 @@ export class ChartComponent implements OnInit {
                     this.tagsStatusInfo[column_tag_id][index] = colData[col];
                 }
             }
-            if (Object.keys(this.tagsStatusInfo).length) {    
+            if (Object.keys(this.tagsStatusInfo).length) {
                 this.annotatedData.emit({
                     tags: this.tagsStatusInfo,
-                    areas: this.savedAllArea
+                    areas: this.savedAllArea,
+                    init: true
                 });
             }
         });

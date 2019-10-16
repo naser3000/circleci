@@ -54,7 +54,7 @@
   <ng-container *ngIf="currentChartDataIndex !== null">
     <button
       nz-button
-      [disabled]="!currentAnnotatedData"
+      [disabled]="false"
       class="completed-btn"
       (click)="completeAnnotation()">
       <i nz-icon type="check-circle-fill"></i>
@@ -67,7 +67,7 @@
       [disabled]="!currentChartDataIndex"
       (click)="setChartData('prev')">
       <i nz-icon type="left"></i>
-      <span *ngIf="currentAnnotatedData">Save & </span>
+      <span *ngIf="tggedDataChanged">Save & </span>
       <span>Previos</span>
     </button>
     <button
@@ -75,7 +75,7 @@
       [nzType]="'primary'"
       [disabled]="currentChartDataIndex === filesList?.length - 1"
       (click)="setChartData('next')">
-      <span *ngIf="currentAnnotatedData">Save & </span>
+      <span *ngIf="tggedDataChanged">Save & </span>
       <span>Next</span>
       <i nz-icon type="right"></i>
     </button>
