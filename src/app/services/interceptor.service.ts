@@ -18,7 +18,11 @@ export class InterceptorService implements HttpInterceptor {
     private _router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.includes('login')) {
+    if (
+      request.url.includes('login') ||
+      request.url.includes('invitation') ||
+      request.url.includes('registration')
+      ) {
       return next.handle(request);
     }
     return next.handle(this.addToken(request))

@@ -51,7 +51,7 @@
     Start Annotation
     <i nz-icon type="right"></i>
   </button>
-  <ng-container *ngIf="currentChartDataIndex !== null">
+  <ng-container *ngIf="currentChartDataIndex !== null && filesList.length">
     <button
       nz-button
       [disabled]="false"
@@ -64,19 +64,19 @@
       nz-button
       class="prev-btn"
       [nzType]="'primary'"
-      [disabled]="!currentChartDataIndex"
+      [disabled]="!currentChartDataIndex && !tggedDataChanged"
       (click)="setChartData('prev')">
       <i nz-icon type="left"></i>
       <span *ngIf="tggedDataChanged">Save & </span>
-      <span>Previos</span>
+      <span *ngIf="filesList.length > 1">Previos</span>
     </button>
     <button
       nz-button
       [nzType]="'primary'"
-      [disabled]="currentChartDataIndex === filesList?.length - 1"
+      [disabled]="currentChartDataIndex === filesList?.length - 1 && !tggedDataChanged"
       (click)="setChartData('next')">
       <span *ngIf="tggedDataChanged">Save & </span>
-      <span>Next</span>
+      <span *ngIf="filesList.length > 1">Next</span>
       <i nz-icon type="right"></i>
     </button>
   </ng-container>
