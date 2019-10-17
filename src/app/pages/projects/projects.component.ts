@@ -68,7 +68,26 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   deleteProjects() {
-    this.projectsList = this.projectsList.filter(item => !this.selectedProjects.includes(item.id));
+    const deleted = [];
+    this.selectedProjects.forEach((id, i) => {
+      this._project.deleteProject(id).subscribe(
+        response => {
+          deleted.push(id);
+          if ( i === this.selectedProjects.length - 1 )  {
+            this.handleDeleteResponse(deleted);
+          }
+        },
+        error => {
+          if ( i === this.selectedProjects.length - 1 )  {
+            this.handleDeleteResponse(deleted);
+          }
+        }
+      );
+    });
+  }
+
+  handleDeleteResponse(deleted_ids) {
+    this.projectsList = this.projectsList.filter(item => !deleted_ids.includes(item.id));
     this.selectedProjects = [];
     this.closeModal();
   }
