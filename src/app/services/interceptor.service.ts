@@ -21,7 +21,8 @@ export class InterceptorService implements HttpInterceptor {
     if (
       request.url.includes('login') ||
       request.url.includes('invitation') ||
-      request.url.includes('registration')
+      request.url.includes('registration') || 
+      request.url.includes('s3.amazonaws.com')
       ) {
       return next.handle(request);
     }
