@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectService } from 'src/app/services/project.service';
 import { AnnotatedFileService } from 'src/app/services/annotated-file.service';
+import { AnnotatedDataService } from 'src/app/services/annotated-data.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -15,6 +16,7 @@ export class ProcessingComponent implements OnInit {
   constructor(private _route: ActivatedRoute,
       private _http: HttpClient,
       private _project: ProjectService,
+      private _annotated_data: AnnotatedDataService,
       private _annotated_file: AnnotatedFileService) { }
     
     
@@ -114,17 +116,21 @@ export class ProcessingComponent implements OnInit {
                 isHorizontal: selectedChart['is_horizontal'],
             }
         }
-        if (selectedChart['annotated_files']) {
-            fileUrl = environment.rootURL + selectedChart['annotated_files']['file'];
-            let selectedArea = selectedChart['annotated_files']['selected_area'];
+        if (selectedChart['annotated_data']) {
+            // fileUrl = environment.rootURL + selectedChart['annotated_data']['file'];
+            let selectedArea = selectedChart['annotated_data']['selected_area'];
             selectedArea = JSON.parse(selectedArea || '{}');
             chartDataForTag['preSelectedArea'] = selectedArea
+            let taggedData = selectedChart['annotated_data']['tagged_data'];
+            taggedData = JSON.parse(taggedData || '{}');
+            chartDataForTag['preTaggedData'] = taggedData
         }
         this._http.get(fileUrl, {responseType: 'text'})
             .subscribe(
                 response => {
                     chartDataForTag['data'] = response;
                     this.chartData = chartDataForTag;
+                    console.log(this.chartData);
                 },
                 error => {}
             );
@@ -132,28 +138,29 @@ export class ProcessingComponent implements OnInit {
 
     writeAnnotatedData(projectFile, completed = false) {
         const data = {
-            annotated: this.currentAnnotatedData,
-            area: JSON.stringify(this.currentSelectedArea),
+            // annotated: this.currentAnnotatedData,
+            selected_area: JSON.stringify(this.currentSelectedArea),
+            tagged_data: JSON.stringify(this.currentAnnotatedData),
             parent: projectFile['id'],
         };
         this.currentAnnotatedData = null;
         this.currentSelectedArea = null;
         this.tggedDataChanged = false;
-        const anno_file = projectFile['annotated_files'];
+        const anno_file = projectFile['annotated_data'];
         if (completed) {
             data['completed'] = true;
         }
-        if (anno_file) {
-            this._annotated_file.editAnnotatedFile(data, anno_file.id).subscribe(
+        if (anno_file.id) {
+            this._annotated_data.editAnnotatedData(data, anno_file.id).subscribe(
                 response => {
-                    projectFile['annotated_files']['selected_area'] = response['selected_area'];
+                    projectFile['annotated_data']['selected_area'] = response['selected_area'];
                 },
                 error => {}
             );
         } else {
-            this._annotated_file.addNewAnnotatedFile(data).subscribe(
+            this._annotated_data.addNewAnnotatedData(data).subscribe(
                 response => {
-                    projectFile['annotated_files'] = {
+                    projectFile['annotated_data'] = {
                         id: response['id'],
                         file: response['file'],
                     }

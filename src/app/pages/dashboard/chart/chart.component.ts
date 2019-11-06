@@ -59,11 +59,14 @@ export class ChartComponent implements OnInit {
         if (dataObj.preSelectedArea) {
             this.savedAllArea = dataObj.preSelectedArea;
             if (this.currentTag) {
-                this.selectedArea = this.savedAllArea[this.currentTag];
+                this.selectedArea = this.savedAllArea[this.currentTag] || [];
             }
             if (this.selectionContext) {
                 this.drawAllRects();
             }
+        }
+        if (dataObj.preTaggedData) {
+            this.tagsStatusInfo = dataObj.preTaggedData;
         }
         let curveNumber = 1;
         let xDataType = null;
