@@ -150,20 +150,19 @@ export class ProcessingComponent implements OnInit {
         if (completed) {
             data['completed'] = true;
         }
-        if (anno_file.id) {
+        if (anno_file && anno_file.id) {
             this._annotated_data.editAnnotatedData(data, anno_file.id).subscribe(
                 response => {
-                    projectFile['annotated_data']['selected_area'] = response['selected_area'];
+                    // projectFile['annotated_data']['tagged_data'] = response['tagged_data'];
+                    // projectFile['annotated_data']['selected_area'] = response['selected_area'];
+                    projectFile['annotated_data'] = response;
                 },
                 error => {}
             );
         } else {
             this._annotated_data.addNewAnnotatedData(data).subscribe(
                 response => {
-                    projectFile['annotated_data'] = {
-                        id: response['id'],
-                        file: response['file'],
-                    }
+                    projectFile['annotated_data'] = response
                 },
                 error => {}
             );

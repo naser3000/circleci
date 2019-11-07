@@ -64,20 +64,24 @@
       nz-button
       class="prev-btn"
       [nzType]="'primary'"
-      [disabled]="!currentChartDataIndex && !tggedDataChanged"
+      *ngIf="filesList.length > 1 || tggedDataChanged"
+      [disabled]="!currentChartDataIndex"
       (click)="setChartData('prev')">
-      <i nz-icon type="left"></i>
-      <span *ngIf="tggedDataChanged">Save & </span>
-      <span *ngIf="filesList.length > 1">Previos</span>
+      <i nz-icon type="left" *ngIf="filesList.length > 1"></i>
+      {{ tggedDataChanged ? 'Save' : '' }}
+      {{ tggedDataChanged && filesList.length > 1 ? ' & ' : '' }}
+      {{ filesList.length > 1 ? 'Previos' : '' }}
     </button>
     <button
       nz-button
       [nzType]="'primary'"
-      [disabled]="currentChartDataIndex === filesList?.length - 1 && !tggedDataChanged"
+      *ngIf="filesList.length > 1"
+      [disabled]="currentChartDataIndex === filesList?.length - 1"
       (click)="setChartData('next')">
-      <span *ngIf="tggedDataChanged">Save & </span>
-      <span *ngIf="filesList.length > 1">Next</span>
-      <i nz-icon type="right"></i>
+      {{ tggedDataChanged ? 'Save' : '' }}
+      {{ tggedDataChanged && filesList.length > 1 ? ' & ' : '' }}
+      {{ filesList.length > 1 ? 'Next' : '' }}
+      <i nz-icon type="right" *ngIf="filesList.length > 1"></i>
     </button>
   </ng-container>
 </div>
