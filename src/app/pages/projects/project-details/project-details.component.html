@@ -163,7 +163,30 @@
     <app-table
       [getTableRowData]="filesList"
       [tableHeaderData]="fileFields"
+      [expandDataKey]="'annotated_data'"
       [(itemSelected)]="selectedFiles">
+      <ng-template let-data let-nestedI="index2">
+        <td>
+          {{ data?.name }}
+          {{ nestedI !== undefined ? 'annotation_' + (nestedI + 1) + '.csv' : '' }}
+        </td>
+        <td>
+          {{ data?.owner }}
+        </td>
+        <td>
+          {{ data?.created_at | date: 'yyyy/MM/dd' }}
+        </td>
+        <td>
+            <button
+              nz-button
+              nzType="primary"
+              nzShape="circle"
+              [class.d-none]="data?.annotated_data"
+              (click)="downloadAnnotatedData(data.id, nestedI)">
+              <i nz-icon type="download"></i>
+            </button>
+        </td>
+      </ng-template>
     </app-table>
   </div>
 </div>

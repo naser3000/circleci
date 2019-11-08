@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, OnInit, Output, EventEmitter, ContentChildren } from '@angular/core';
+import { Component, Input, TemplateRef, OnInit, Output, EventEmitter, ContentChildren, ContentChild } from '@angular/core';
 
 
 @Component({
@@ -25,6 +25,8 @@ export class TableComponent implements OnInit {
   listOfData: Array<any> = [];
   listOfDisplayData: Array<any> = [];
   mapOfCheckedId: { [key: string]: boolean } = {};
+  mapOfCheckedNestedId: { [key: string]: boolean } = {};
+  mapOfExpandId: { [key: string]: boolean } = {};
   timeFieldKeys = ['deadline', 'created_at'];
   linkFieldKeys = ['projectName'];
   @Output() itemSelectedChange: EventEmitter<any> = new EventEmitter();
@@ -34,7 +36,9 @@ export class TableComponent implements OnInit {
     }
   }
   @ContentChildren(TemplateRef) cellTemplates;
+  @ContentChild('rowTemplate') tableRowTemplate;
   @Input() tableHeaderData: any = {}
+  @Input() expandDataKey: string;
   @Input() set getTableRowData(value) {
     this.listOfData = [
       ...value

@@ -162,7 +162,7 @@ export class ProcessingComponent implements OnInit {
         } else {
             this._annotated_data.addNewAnnotatedData(data).subscribe(
                 response => {
-                    projectFile['annotated_data'] = response
+                    projectFile['annotated_data'] = response;
                 },
                 error => {}
             );
@@ -170,7 +170,7 @@ export class ProcessingComponent implements OnInit {
     }
 
     getProjectDetails() {
-        this._project.getSingleProject(this.project_id).subscribe(
+        this._project.getDashboardProject(this.project_id).subscribe(
             response => {
                 this.project_details = response;
                 this.filesList = response['files'];

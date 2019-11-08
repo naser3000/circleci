@@ -25,6 +25,7 @@
     "chartjs-plugin-zoom": "^0.7.3",
     "core-js": "^2.5.4",
     "express": "^4.17.1",
+    "file-saver": "^2.0.2",
     "moment": "^2.24.0",
     "ng-zorro-antd": "^7.5.1",
     "rxjs": "~6.3.3",

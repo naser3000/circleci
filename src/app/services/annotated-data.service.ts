@@ -30,4 +30,8 @@ export class AnnotatedDataService {
   editAnnotatedData(data, id) {
     return this._http.put(this.ROOT_URL + id + '/', data);
   }
+
+  downloadAnnotatedData(id) {
+    return this._http.get(this.ROOT_URL + 'download/' + id + '/', { responseType: 'arraybuffer' });
+  }
 }

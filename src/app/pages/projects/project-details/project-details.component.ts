@@ -6,6 +6,8 @@ import { AnnotatorService } from 'src/app/services/annotator.service';
 import { ProjectFileService } from 'src/app/services/project-file.service';
 import { ProjectService } from 'src/app/services/project.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { AnnotatedDataService } from 'src/app/services/annotated-data.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-project-details',
@@ -20,7 +22,8 @@ export class ProjectDetailsComponent implements OnInit {
     private _auth: AuthService,
     private _proj_file: ProjectFileService,
     private _manager: ManagerService,
-    private _annotator: AnnotatorService) { }
+    private _annotator: AnnotatorService,
+    private _anno_data: AnnotatedDataService) { }
   
   project_id = null;
   project_details = null;
@@ -66,7 +69,8 @@ export class ProjectDetailsComponent implements OnInit {
     // dataset: 'Dataset',
     owner: 'Owner',
     // status: 'Status',
-    created_at: 'Upload Date'
+    created_at: 'Upload Date',
+    action: 'Actions'
   };
   managersList : any = [];
   annotatorsList: any = [];
@@ -90,6 +94,21 @@ export class ProjectDetailsComponent implements OnInit {
     this.deletedCount = count;
     this.deletedItemType = type;
     this.deleteModalShow = true;
+  }
+
+  downloadAnnotatedData(id, index) {
+    this._anno_data.downloadAnnotatedData(id).subscribe(
+      response => {
+        const blob = new Blob([response], { type: 'text/csv'});
+        saveAs(blob, `annotation_${index + 1}.csv`);
+        // const url = window.URL.createObjectURL(blob);
+        // const pwa = window.open(url);
+        // if (!pwa || pwa.closed || typeof pwa.closed === undefined) {
+        //     alert( 'Please disable your Pop-up blocker and try again.');
+        // }
+      },
+      error => {}
+    );
   }
 
   deleteSelectedItem() {

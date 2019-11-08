@@ -65,7 +65,7 @@
       class="prev-btn"
       [nzType]="'primary'"
       *ngIf="filesList.length > 1 || tggedDataChanged"
-      [disabled]="!currentChartDataIndex"
+      [disabled]="!currentChartDataIndex && !tggedDataChanged"
       (click)="setChartData('prev')">
       <i nz-icon type="left" *ngIf="filesList.length > 1"></i>
       {{ tggedDataChanged ? 'Save' : '' }}

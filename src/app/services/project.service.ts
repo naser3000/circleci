@@ -19,6 +19,10 @@ export class ProjectService {
     return this._http.get(this.ROOT_URL + id + '/');
   }
 
+  getDashboardProject(id) {
+    return this._http.get(this.ROOT_URL + 'dashboard/' + id + '/');
+  }
+
   addNewProject(data) {
     return this._http.post(this.ROOT_URL, data);
   }
