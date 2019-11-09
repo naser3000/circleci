@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserDetailsComponent } from './user-details.component';
 import { Routes, RouterModule } from '@angular/router';
-import { NzTabsModule } from 'ng-zorro-antd';
+import { NzTabsModule, NzButtonModule, NzFormModule, NzInputModule, NzMessageModule } from 'ng-zorro-antd';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: UserDetailsComponent }
@@ -13,7 +14,12 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    NzTabsModule
+    ReactiveFormsModule,
+    NzTabsModule,
+    NzButtonModule,
+    NzFormModule,
+    NzInputModule,
+    NzMessageModule
   ]
 })
 export class UserDetailsModule { }

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-user-details',
@@ -9,11 +12,60 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserDetailsComponent implements OnInit {
 
-  constructor(private _route: ActivatedRoute,
-    private _user: UserService) { }
-
+  constructor(private fb: FormBuilder,
+    private _msg: NzMessageService,
+    private _route: ActivatedRoute,
+    private _user: UserService,
+    private _auth: AuthService) {
+      this.validateForm = this.fb.group(
+        {
+          oldPassword: [null, [Validators.required]],
+          newPassword: [null, [Validators.required]],
+          confirmPassword: [null, [this.confirmValidator]],
+        },
+      );
+    }
+  
+  validateForm: FormGroup;
   user_id = null;
   user_data = null;
+
+  confirmValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.validateForm.controls['newPassword'].value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
+
+  submitForm = ($event: any, value: any) => {
+    $event.preventDefault();
+    for (const key in this.validateForm.controls) {
+      this.validateForm.controls[key].markAsDirty();
+      this.validateForm.controls[key].updateValueAndValidity();
+    }
+    this._auth.changePassword(value).subscribe(
+      response => {
+        this._msg.success('password changed successfully.');
+      },
+      error => {
+        this._msg.error('change password failed.');
+      }
+    );
+  };
+
+  resetForm(e: MouseEvent): void {
+    if (e) {
+      e.preventDefault();
+    }
+      
+    this.validateForm.reset();
+    for (const key in this.validateForm.controls) {
+      this.validateForm.controls[key].markAsPristine();
+      this.validateForm.controls[key].updateValueAndValidity();
+    }
+  }
 
   getUserProfile() {
     this._user.userProfile(this.user_id).subscribe(

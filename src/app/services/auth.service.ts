@@ -10,29 +10,34 @@ export class AuthService {
   constructor(private _http: HttpClient) { }
 
   private ROOT_URL = environment.rootURL + '/rest-auth/';
+  private USER_ROOT_URL = environment.rootURL + '/api/v1/';
 
   loginUser(data) {
     return this._http.post(this.ROOT_URL + 'login/', data);
   }
   
   userInvitation(data) {
-    return this._http.post(environment.rootURL + '/api/v1/invite-user/', data);
+    return this._http.post(this.USER_ROOT_URL + 'invite-user/', data);
   }
   
   registerUser(data) {
-    return this._http.post(environment.rootURL + '/api/v1/registration/', data);
+    return this._http.post(this.USER_ROOT_URL + 'registration/', data);
   }
   
   registerKeyValidation(data) {
-    return this._http.post(environment.rootURL + '/api/v1/check-invitation/', data);
+    return this._http.post(this.USER_ROOT_URL + 'check-invitation/', data);
   }
   
   getUserType() {
-    return this._http.get(environment.rootURL + '/api/v1/user-type/');
+    return this._http.get(this.USER_ROOT_URL + 'user-type/');
   }
 
   logoutUser() {
     return this._http.post(this.ROOT_URL + 'logout/', {});
+  }
+
+  changePassword(data) {
+    return this._http.post(this.USER_ROOT_URL + 'change-password/', data);
   }
 
   resetPassword(data) {
