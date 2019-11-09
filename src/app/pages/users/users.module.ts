@@ -8,8 +8,10 @@ import { AddManagerModule } from './add-manager/add-manager.module';
 import { AddAnnotatorModule } from './add-annotator/add-annotator.module';
 
 const routes: Routes = [
-  {path: '', component: UsersComponent}
+  { path: '', component: UsersComponent },
+  { path: ':id', loadChildren: './user-details/user-details.module#UserDetailsModule' },
 ]
+
 @NgModule({
   declarations: [
     UsersComponent

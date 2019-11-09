@@ -1,0 +1,21 @@
+<nz-tabset>
+  <nz-tab nzTitle="Account">
+    <div class="user-data">
+      <span class="key">Username</span>
+      <span class="value">{{ user_data?.username || '-' }}</span>
+      <span class="key">First Name</span>
+      <span class="value">{{ user_data?.first_name || '-' }}</span>
+      <span class="key">Last Name</span>
+      <span class="value">{{ user_data?.last_name || '-' }}</span>
+      <span class="key">Email</span>
+      <span class="value">{{ user_data?.email || '-' }}</span>
+      <span class="key">Date Joined</span>
+      <span class="value">{{ user_data?.date_joined || '-' }}</span>
+      <span class="key">Last Login</span>
+      <span class="value">{{ user_data?.last_login || '-' }}</span>
+    </div>
+  </nz-tab>
+  <nz-tab nzTitle="Password">
+    Content of Tab Pane 2
+  </nz-tab>
+</nz-tabset>

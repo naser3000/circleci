@@ -24,7 +24,7 @@
     [(itemSelected)]="selectedManagers">
     <ng-template let-data>
       <td>
-          <a [routerLink]="data?.id">
+          <a [routerLink]="data?.user?.id">
             {{ data?.user?.username }}
           </a>
       </td>
