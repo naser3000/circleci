@@ -85,7 +85,7 @@
           </div>
           <ul nz-menu nzSelectable>
             <li nz-menu-item>
-              <a>Profile</a>
+              <a [routerLink]="'/users/' + currentUser?.pk">Profile</a>
             </li>
             <li nz-menu-divider></li>
             <li nz-menu-item (click)="logoutUser()">
