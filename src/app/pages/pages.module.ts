@@ -13,7 +13,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
       { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule', canActivate: [ManagerGuard] },
-      { path: 'users', loadChildren: './users/users.module#UsersModule', canActivate: [AdminGuard] },
+      // { path: 'users', loadChildren: './users/users.module#UsersModule', canActivate: [AdminGuard] },
+      { path: 'users', loadChildren: './users/users.module#UsersModule' },
       { path: 'settings', loadChildren: './setting/setting.module#SettingModule', canActivate: [AdminGuard] },
     ]
   }

@@ -14,6 +14,18 @@
       <span class="key">Last Login</span>
       <span class="value">{{ user_data?.last_login || '-' }}</span>
     </div>
+    <button
+      class="edit-user-btn"
+      nz-button
+      nzType="primary"
+      (click)="editUserModalShow = true">
+      Edit Info
+    </button>
+    <app-edit-account
+      [userData]="user_data"
+      [(isModalVisible)]="editUserModalShow"
+      (submitedValue)="editUser($event)">
+    </app-edit-account>
   </nz-tab>
   <nz-tab nzTitle="Password">
       <form class="change-password"

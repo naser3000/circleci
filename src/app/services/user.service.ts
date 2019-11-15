@@ -14,4 +14,8 @@ export class UserService {
   userProfile(id) {
     return this._http.get(this.ROOT_URL + id);
   }
+
+  editUserProfile(id, data) {
+    return this._http.put(this.ROOT_URL + id, data);
+  }
 }
