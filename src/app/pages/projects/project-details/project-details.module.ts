@@ -5,7 +5,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { TableModule } from 'src/app/components/table/table.module';
 import { AddUserModule } from '../add-user/add-user.module';
 import { UploadFileModule } from '../upload-file/upload-file.module';
-import { NzButtonModule, NzIconModule, NzModalModule, NzTagModule, NzInputModule, NzNoAnimationModule } from 'ng-zorro-antd';
+import {
+  NzButtonModule,
+  NzIconModule,
+  NzModalModule,
+  NzTagModule,
+  NzInputModule,
+  NzNoAnimationModule,
+  NzProgressModule,
+  NzInputNumberModule
+} from 'ng-zorro-antd';
 import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
@@ -28,7 +37,9 @@ const routes: Routes = [
     NzModalModule,
     NzTagModule,
     NzInputModule,
-    NzNoAnimationModule
+    NzNoAnimationModule,
+    NzProgressModule,
+    NzInputNumberModule
   ],
   exports: [
     ProjectDetailsComponent

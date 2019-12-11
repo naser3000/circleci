@@ -1,32 +1,51 @@
 <div>
-  <div>
-    <h3>Project Tags</h3>
-    <div class="all-tags">
-      <nz-tag
-        *ngFor="let tag of tags"
-        [nzMode]="'closeable'"
-        (nzAfterClose)="handleClose(tag)"
-      >
-        {{ sliceTagName(tag?.name) }}
-      </nz-tag>
-      <nz-tag
-        *ngIf="!inputVisible"
-        nzColor="#1890ff"
-        class="editable-tag"
-        nzNoAnimation
-        (click)="showInput()">
-        <i nz-icon type="plus"></i> Add New
-      </nz-tag>
-      <input
-        #inputElement
-        nz-input
-        type="text"
-        nzSize="small"
-        *ngIf="inputVisible"
-        [(ngModel)]="inputValue"
-        (blur)="handleInputConfirm()"
-        (keydown.enter)="handleInputConfirm()"
-      />
+  <div class="ant-row">
+    <div class="ant-col-md-18">
+      <h3>Project Tags</h3>
+      <div class="all-tags">
+        <nz-tag
+          *ngFor="let tag of tags"
+          [nzMode]="'closeable'"
+          (nzAfterClose)="handleClose(tag)"
+        >
+          {{ sliceTagName(tag?.name) }}
+        </nz-tag>
+        <nz-tag
+          *ngIf="!inputVisible"
+          nzColor="#1890ff"
+          class="editable-tag"
+          nzNoAnimation
+          (click)="showInput()">
+          <i nz-icon type="plus"></i> Add New
+        </nz-tag>
+        <input
+          #inputElement
+          nz-input
+          type="text"
+          nzSize="small"
+          *ngIf="inputVisible"
+          [(ngModel)]="inputValue"
+          (blur)="handleInputConfirm()"
+          (keydown.enter)="handleInputConfirm()"
+        />
+      </div>
+    </div>
+    <div class="ant-col-md-6 progress-section">
+      <nz-progress
+        nzType="circle"
+        [nzWidth]="80"
+        [nzPercent]="project_details?.progress_percent || 0">
+      </nz-progress>
+      <label class="max-annotation">
+        max annotation:
+        <nz-input-number
+            [nzSize]="'small'"
+            [nzMin]="1"
+            [nzStep]="1"
+            [(ngModel)]="maxAnnotations"
+            (keydown.enter)="editMaxAnnotation()">
+        </nz-input-number>
+      </label>
     </div>
   </div>
   <!-- <div>

@@ -8,6 +8,7 @@ import { ProjectService } from 'src/app/services/project.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AnnotatedDataService } from 'src/app/services/annotated-data.service';
 import { saveAs } from 'file-saver';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-project-details',
@@ -23,7 +24,8 @@ export class ProjectDetailsComponent implements OnInit {
     private _proj_file: ProjectFileService,
     private _manager: ManagerService,
     private _annotator: AnnotatorService,
-    private _anno_data: AnnotatedDataService) { }
+    private _anno_data: AnnotatedDataService,
+    private _msg: NzMessageService) { }
   
   project_id = null;
   project_details = null;
@@ -35,6 +37,7 @@ export class ProjectDetailsComponent implements OnInit {
   deletedCount = null;
   deletedItemType = null;
   addUserType = null;
+  maxAnnotations = 0;
   availableUser = [];
   selectedManagers = [];
   selectedAnnotators = [];
@@ -108,6 +111,21 @@ export class ProjectDetailsComponent implements OnInit {
         // }
       },
       error => {}
+    );
+  }
+
+  editMaxAnnotation() {
+    const data = {
+      max_annotations: this.maxAnnotations
+    };
+    this._project.editProject(data, this.project_id).subscribe(
+      response => {
+        this.maxAnnotations = response['max_annotations'];
+        this._msg.success('max annotation changed successfully.');
+      },
+      error => {
+        this._msg.error('change max annotation failed.');
+      }
     );
   }
 
@@ -326,6 +344,7 @@ export class ProjectDetailsComponent implements OnInit {
     this._project.getSingleProject(this.project_id).subscribe(
       response => {
         this.project_details = response;
+        this.maxAnnotations = response['max_annotations'];
         this.tags = response['tags'];
         this.annotatorsList = response['annotators'];
         this.filesList = response['files'];
