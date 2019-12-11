@@ -1,10 +1,12 @@
-
-.login-form {
+.login-form,
+.reset-password-form,
+.reset-password-message {
   margin: 0 auto;
   max-width: 300px;
 }
 
-.login-form-button {
+.login-form-button,
+.reset-password-form-button {
   width: 100%;
 }
     

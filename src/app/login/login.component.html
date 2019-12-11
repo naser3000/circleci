@@ -1,6 +1,9 @@
-
 <div class="login-content">
-  <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm($event, validateForm.value)">
+  <form nz-form
+    *ngIf="formStatus==='login'"
+    class="login-form"
+    [formGroup]="validateForm"
+    (ngSubmit)="submitForm($event, validateForm.value)">
     <nz-form-item>
       <nz-form-control>
         <nz-input-group [nzPrefix]="prefixUser">
@@ -27,11 +30,61 @@
           <span>Remember me</span>
         </label> -->
         <button nz-button class="login-form-button" [nzType]="'primary'">Log in</button>
-        <a class="login-form-forgot" class="login-form-forgot">Forgot password</a>
+        <a class="login-form-forgot"
+          (click)="formStatus='forgot'">
+          Forgot password
+        </a>
       </nz-form-control>
     </nz-form-item>
   </form>
+  <form nz-form
+    *ngIf="formStatus==='forgot'"
+    class="reset-password-form"
+    [formGroup]="forgotForm"
+    (ngSubmit)="resetPassword($event, forgotForm.value)">
+    <nz-form-item>
+      <nz-form-control>
+        <nz-input-group [nzPrefix]="prefixMail">
+          <input type="email"
+            nz-input
+            formControlName="email"
+            placeholder="email"/>
+        </nz-input-group>
+        <nz-form-explain *ngIf="forgotForm.get('email')?.dirty && forgotForm.get('email')?.errors">
+          Please input your email!
+        </nz-form-explain>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control>
+        <button
+          nz-button
+          class="reset-password-form-button"
+          [nzType]="'primary'">
+          Reset Password
+        </button>
+        <a class="back-to-login"
+          (click)="formStatus='login'">
+          Back to Login
+        </a>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div class="reset-password-message"
+  *ngIf="formStatus==='msg'">
+    <h3>Check your inbox.</h3>
+    <p>We've emailed you instructions for setting your password.</p>
+    <p>You should receive the email shortly!</p>
+    <button
+      nz-button
+      class="reset-password-form-button"
+      [nzType]="'primary'"
+      (click)="formStatus='login'">
+      Back to Login
+    </button>
+  </div>
   <ng-template #prefixUser><i nz-icon type="user"></i></ng-template>
   <ng-template #prefixLock><i nz-icon type="lock"></i></ng-template>
+  <ng-template #prefixMail><i nz-icon type="mail"></i></ng-template>
 </div>
   

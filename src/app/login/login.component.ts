@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit {
 
 
   validateForm: FormGroup;
+  forgotForm: FormGroup;
+  formStatus = 'login';
 
   submitForm(e, formData): void {
     for (const i in this.validateForm.controls) {
@@ -32,7 +34,6 @@ export class LoginComponent implements OnInit {
     };
     this._auth.loginUser(data).subscribe(
       response => {
-        console.log(response);
         this._token.setToken(response['key']);
         // this._shared.changeUser(response['user']);
         this._router.navigate(['']);
@@ -40,12 +41,32 @@ export class LoginComponent implements OnInit {
       error => {}
     );
   }
+  
+  resetPassword(e, formData): void {
+    for (const i in this.forgotForm.controls) {
+      this.forgotForm.controls[i].markAsDirty();
+      this.forgotForm.controls[i].updateValueAndValidity();
+    }
+    const data = {
+      email: formData['email'],
+    };
+    // this._auth.loginUser(data).subscribe(
+    //   response => {
+    //     console.log(response);
+    //   },
+    //   error => {}
+    // );
+    this.formStatus = 'msg';
+  }
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]],
       remember: [true]
+    });
+    this.forgotForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
     });
   }
 }
