@@ -19,6 +19,10 @@ export class ProjectFileService {
     return this._http.get(this.ROOT_URL + id + '/');
   }
 
+  assignProjectFile(id) {
+    return this._http.get(this.ROOT_URL + 'assign/' + id + '/');
+  }
+
   addNewProjectFile(data) {
     const header = new HttpHeaders().set('enctype', 'multipart/form-data')
     return this._http.post(this.ROOT_URL, data, {headers: header});

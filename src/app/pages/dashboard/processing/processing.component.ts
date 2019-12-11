@@ -5,6 +5,7 @@ import { ProjectService } from 'src/app/services/project.service';
 import { AnnotatedFileService } from 'src/app/services/annotated-file.service';
 import { AnnotatedDataService } from 'src/app/services/annotated-data.service';
 import { environment } from 'src/environments/environment';
+import { ProjectFileService } from 'src/app/services/project-file.service';
 
 @Component({
   selector: 'app-processing',
@@ -16,6 +17,7 @@ export class ProcessingComponent implements OnInit {
   constructor(private _route: ActivatedRoute,
       private _http: HttpClient,
       private _project: ProjectService,
+      private _project_file: ProjectFileService,
       private _annotated_data: AnnotatedDataService,
       private _annotated_file: AnnotatedFileService) { }
     
@@ -36,6 +38,7 @@ export class ProcessingComponent implements OnInit {
     //     'v_data.csv',
     // ];
     filesList = [];
+    filesIdList = [];
     chartData = null;
 
     toggleCollapsed(): void {
@@ -51,7 +54,7 @@ export class ProcessingComponent implements OnInit {
                 this.currentChartDataIndex = -1;
                 // return;
             }
-            if (this.currentChartDataIndex === this.filesList.length - 1) {
+            if (this.currentChartDataIndex === this.filesIdList.length - 1) {
                 return;
             }
             this.currentChartDataIndex = this.currentChartDataIndex + 1;
@@ -69,7 +72,7 @@ export class ProcessingComponent implements OnInit {
         }
 
         console.log('@@@@@@', this.currentAnnotatedData);
-        this.readFileData(this.currentChartDataIndex);
+        this.getOrAssignFile(this.currentChartDataIndex);
     }
 
     getAnnotatedData(value) {
@@ -105,6 +108,19 @@ export class ProcessingComponent implements OnInit {
     //             }
     //         );
     // }
+
+    getOrAssignFile(index) {
+        const file_id = this.filesIdList[index];
+        this._project_file.assignProjectFile(file_id).subscribe(
+            response => {
+                this.filesList[index] = response;
+                this.readFileData(index);
+            },
+            error => {
+
+            }
+        );
+    }
 
     readFileData(index) {
         const selectedChart = this.filesList[index];
@@ -173,7 +189,7 @@ export class ProcessingComponent implements OnInit {
         this._project.getDashboardProject(this.project_id).subscribe(
             response => {
                 this.project_details = response;
-                this.filesList = response['files'];
+                this.filesIdList = response['files'];
             },
           error => {}
         );
