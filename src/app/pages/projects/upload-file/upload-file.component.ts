@@ -14,7 +14,7 @@ export class UploadFileComponent implements OnInit {
     this.validateForm = this.fb.group({
       curveNumber: ['', [Validators.required]],
       xDataType: ['', [Validators.required]],
-      isHorizontal: [false],
+      isVertical: [false],
     });
   }
   validateForm: FormGroup;
@@ -92,8 +92,8 @@ export class UploadFileComponent implements OnInit {
       this.validateForm.controls[key].markAsDirty();
       this.validateForm.controls[key].updateValueAndValidity();
     }
-    if (value.isHorizontal === null) {
-      value.isHorizontal = false;
+    if (value.isVertical === null) {
+      value.isVertical = false;
     }
     this.fileDataResult.type = value;
     this.handleUpload();

@@ -158,7 +158,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         data.append('project', project.id);
         data.append('data_type', files.type['xDataType']);
         data.append('curves_count', files.type['curveNumber']);
-        data.append('is_horizontal', files.type['isHorizontal']);
+        data.append('is_vertical', files.type['isVertical']);
         this._proj_file.addNewProjectFile(data).subscribe(
           response => {
             this.uploadResult = 'success';

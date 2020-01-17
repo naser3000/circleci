@@ -129,7 +129,7 @@ export class ProcessingComponent implements OnInit {
             type: {
                 curveNumber: selectedChart['curves_count'],
                 xDataType: selectedChart['data_type'],
-                isHorizontal: selectedChart['is_horizontal'],
+                isVertical: selectedChart['is_vertical'],
             }
         }
         if (selectedChart['annotated_data']) {
