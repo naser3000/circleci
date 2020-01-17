@@ -85,9 +85,11 @@ export class ChartComponent implements OnInit {
         // this.chartConfig.data.labels = [];
         // this.chartConfig.data.datasets[0].data = [];
         this.chartConfig.data.datasets = [];
+        const firstRow = lines[0].split(',');
         for (let col=1; col <= curveNumber; col++) {
+            const curveLabel = isNaN(Number(firstRow[col])) ? firstRow[col] : `Curve ${col}`;
             const dataSet: any = {
-                label: `# Curve ${col}`,
+                label: curveLabel,
                 data: [],
                 borderWidth: 1,
                 borderColor: this.lineColors[col - 1],
@@ -100,7 +102,6 @@ export class ChartComponent implements OnInit {
             this.chartConfig.data.datasets.splice(1);
         }
         const preSetTag = [];
-        const firstRow = lines[0].split(',');
         for (let col = curveNumber + 1; col < firstRow.length; col++) {
             if (firstRow[col].includes(':')) {
                 const tag_id = firstRow[col].split(':')[0];
