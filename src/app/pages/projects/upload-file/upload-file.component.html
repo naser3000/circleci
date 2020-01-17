@@ -21,11 +21,11 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="7" nzRequired>x Data Type</nz-form-label>
+      <nz-form-label [nzSpan]="7" nzRequired>Index Type</nz-form-label>
       <nz-form-control [nzSpan]="12" nzHasFeedback>
         <nz-select
           formControlName="xDataType">
-          <nz-option nzValue="float" nzLabel="Float"></nz-option>
+          <nz-option nzValue="float" nzLabel="Integer"></nz-option>
           <nz-option nzValue="date" nzLabel="Date"></nz-option>
         </nz-select>
         <nz-form-explain *ngIf="validateForm.get('xDataType')?.dirty && validateForm.get('xDataType')?.errors">
