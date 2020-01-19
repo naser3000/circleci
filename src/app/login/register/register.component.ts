@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
 
   validateForm: FormGroup;
   registerToken = null;
+  formError = {};
 
   checkPasswords(group: FormGroup) {
   let pass = group.get('password').value;
@@ -33,6 +34,7 @@ export class RegisterComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
+    this.formError = {};
     const data = {
       username: formData['username'],
       password: formData['password'],
@@ -46,7 +48,9 @@ export class RegisterComponent implements OnInit {
         this._token.setToken(response['key']);
         this._router.navigate(['']);
       },
-      error => {}
+      error => {
+        this.formError = error.error;
+      }
     );
   }
 
