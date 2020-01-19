@@ -11,6 +11,7 @@ export class AuthService {
 
   private ROOT_URL = environment.rootURL + '/rest-auth/';
   private USER_ROOT_URL = environment.rootURL + '/api/v1/';
+  private RESET_PASS_ROOT_URL = environment.rootURL + '/password_reset/';
 
   loginUser(data) {
     return this._http.post(this.ROOT_URL + 'login/', data);
@@ -40,12 +41,16 @@ export class AuthService {
     return this._http.post(this.USER_ROOT_URL + 'change-password/', data);
   }
 
-  resetPassword(data) {
-    return this._http.post(this.ROOT_URL + 'password/reset/', data);
+  resetPasswordByEmail(data) {
+    return this._http.post(this.RESET_PASS_ROOT_URL, data);
   }
 
-  confirmPassword(data) {
-    return this._http.post(this.ROOT_URL + 'password/reset/confirm/', data);
+  resetPassword(data) {
+    return this._http.post(this.RESET_PASS_ROOT_URL + 'confirm/', data);
+  }
+
+  confirmResetPasswordToken(data) {
+    return this._http.post(this.RESET_PASS_ROOT_URL + 'validate_token/', data);
   }
 
   getUserInfo() {

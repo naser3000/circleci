@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,25 +12,34 @@ import { ActivatedRoute } from '@angular/router';
 export class ResetPasswordComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
-    private _route: ActivatedRoute) { }
+    private _route: ActivatedRoute,
+    private _auth: AuthService,
+    private _router: Router,
+    private _msg: NzMessageService) { }
 
   resetPasswordForm: FormGroup;
   resetPasswordToken = null;
+  formError = {};
   
   resetPassword(e, formData): void {
     for (const i in this.resetPasswordForm.controls) {
       this.resetPasswordForm.controls[i].markAsDirty();
       this.resetPasswordForm.controls[i].updateValueAndValidity();
     }
+    this.formError = {};
     const data = {
-      email: formData['email'],
+      password: formData['newPassword'],
+      token: this.resetPasswordToken,
     };
-    // this._auth.loginUser(data).subscribe(
-    //   response => {
-    //     console.log(response);
-    //   },
-    //   error => {}
-    // );
+    this._auth.resetPassword(data).subscribe(
+      response => {
+        this._msg.success('Password Changed Successfully!');
+        this._router.navigate(['/login']);
+      },
+      error => {
+        this.formError = error.error;
+      }
+    );
   }
 
   confirmValidator = (control: FormControl): { [s: string]: boolean } => {

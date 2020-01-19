@@ -22,6 +22,7 @@ export class InterceptorService implements HttpInterceptor {
       request.url.includes('login') ||
       request.url.includes('invitation') ||
       request.url.includes('registration') || 
+      request.url.includes('password_reset') || 
       request.url.includes('s3.amazonaws.com')
       ) {
       return next.handle(request);

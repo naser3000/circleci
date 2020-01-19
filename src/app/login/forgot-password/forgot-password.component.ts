@@ -19,23 +19,28 @@ export class ForgotPasswordComponent implements OnInit {
 
   forgotForm: FormGroup;
   formStatus = 'forgot';
-
+  formError = {};
   
   resetPassword(e, formData): void {
     for (const i in this.forgotForm.controls) {
       this.forgotForm.controls[i].markAsDirty();
       this.forgotForm.controls[i].updateValueAndValidity();
     }
+    this.formError = {};
+    if (this.forgotForm.invalid) {
+      return;
+    }
     const data = {
       email: formData['email'],
     };
-    // this._auth.loginUser(data).subscribe(
-    //   response => {
-    //     console.log(response);
-    //   },
-    //   error => {}
-    // );
-    this.formStatus = 'msg';
+    this._auth.resetPasswordByEmail(data).subscribe(
+      response => {
+        this.formStatus = 'msg';
+      },
+      error => {
+        this.formError = error.error;
+      }
+    );
   }
 
   ngOnInit(): void {
