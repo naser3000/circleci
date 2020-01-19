@@ -9,6 +9,10 @@ const routes: Routes = [
     loadChildren: './login/register/register.module#RegisterModule',
     canActivate: [InvitedUserGuard]
   },
+  {
+    path: 'forgot-password',
+    loadChildren: './login/forgot-password/forgot-password.module#ForgotPasswordModule',
+  },
   { path: '',      loadChildren: './pages/pages.module#PagesModule', canActivate:[LoggedInUserGuard] },
   { path: '**',      redirectTo: '', pathMatch: 'full' },
 ];
