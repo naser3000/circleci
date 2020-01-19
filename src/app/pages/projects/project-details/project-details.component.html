@@ -199,9 +199,11 @@
             <button
               nz-button
               nzType="primary"
-              nzShape="circle"
-              [class.d-none]="data?.annotated_data"
-              (click)="downloadAnnotatedData(data.id, nestedI)">
+              [nzLoading]="data?.downloadFileLoading"
+              [nzShape]="data?.annotated_data ? '' : 'circle'"
+              (click)="data?.annotated_data ?
+                downloadProjectFile(data) :
+                downloadAnnotatedData(data, nestedI)">
               <i nz-icon type="download"></i>
             </button>
         </td>

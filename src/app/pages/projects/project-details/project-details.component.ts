@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AnnotatedDataService } from 'src/app/services/annotated-data.service';
 import { saveAs } from 'file-saver';
 import { NzMessageService } from 'ng-zorro-antd';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-project-details',
@@ -18,6 +19,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class ProjectDetailsComponent implements OnInit {
 
   constructor(private _route: ActivatedRoute,
+    private _http: HttpClient,
     private _project: ProjectService,
     private _tag: TagService,
     private _auth: AuthService,
@@ -99,9 +101,29 @@ export class ProjectDetailsComponent implements OnInit {
     this.deleteModalShow = true;
   }
 
-  downloadAnnotatedData(id, index) {
-    this._anno_data.downloadAnnotatedData(id).subscribe(
+  downloadProjectFile(fileData) {
+    const fileUrl = fileData.file;
+    const fileName = fileData.name;
+    fileData.downloadFileLoading = true;
+    this._http.get(fileUrl, { responseType: 'arraybuffer' }).subscribe(
       response => {
+        fileData.downloadFileLoading = false;
+        const blob = new Blob([response], { type: 'text/csv'});
+        saveAs(blob, fileName);
+      },
+      error => {
+        fileData.downloadFileLoading = false;
+        this._msg.error('Download file failed!');
+      }
+    );
+  }
+
+  downloadAnnotatedData(fileData, index) {
+    const fileID = fileData.id;
+    fileData.downloadFileLoading = true;
+    this._anno_data.downloadAnnotatedData(fileID).subscribe(
+      response => {
+        fileData.downloadFileLoading = false;
         const blob = new Blob([response], { type: 'text/csv'});
         saveAs(blob, `annotation_${index + 1}.csv`);
         // const url = window.URL.createObjectURL(blob);
@@ -110,7 +132,9 @@ export class ProjectDetailsComponent implements OnInit {
         //     alert( 'Please disable your Pop-up blocker and try again.');
         // }
       },
-      error => {}
+      error => {
+        fileData.downloadFileLoading = false;
+        this._msg.error('Download file failed!');}
     );
   }
 
