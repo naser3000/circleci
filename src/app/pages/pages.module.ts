@@ -15,7 +15,7 @@ const routes: Routes = [
       { path: 'projects', loadChildren: './projects/projects.module#ProjectsModule', canActivate: [ManagerGuard] },
       // { path: 'users', loadChildren: './users/users.module#UsersModule', canActivate: [AdminGuard] },
       { path: 'users', loadChildren: './users/users.module#UsersModule' },
-      { path: 'settings', loadChildren: './setting/setting.module#SettingModule', canActivate: [AdminGuard] },
+      { path: 'groups', loadChildren: './setting/setting.module#SettingModule', canActivate: [AdminGuard] },
     ]
   }
 ];

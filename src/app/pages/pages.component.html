@@ -56,12 +56,12 @@
       <li nz-menu-item
         nz-tooltip
         nzPlacement="right"
-        [nzTitle]="isCollapsed ? 'Setting' : ''"
+        [nzTitle]="isCollapsed ? 'Groups' : ''"
         *ngIf="currentUser?.type === 'Admin'">
         <a title
-          routerLink="/settings">
+          routerLink="/groups">
           <i nz-icon type="setting"></i>
-          <span>Setting</span>
+          <span>Groups</span>
         </a>
       </li>
     </ul>
