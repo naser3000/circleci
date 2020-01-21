@@ -17,13 +17,20 @@ export class AddProjectComponent {
       projectName: ['', [Validators.required]],
       group: ['', [Validators.required]],
       deadline: ['', [Validators.required]],
-      instruction: [''],
+      instruction: ['', [Validators.maxLength(256)]],
       description: ['']
     });
   }
   isModalVisible = false;
   @Output() submitedValue: EventEmitter<any> = new EventEmitter();
   @Input() groupOptions = [];
+  @Input() formError = {};
+  @Input() set formResponse(res) {
+    if (res) {
+      this.resetForm(null);
+      this.isModalVisible = false;
+    }
+  };
   validateForm: FormGroup;
   submitForm = ($event: any, value: any) => {
     $event.preventDefault();
@@ -33,15 +40,14 @@ export class AddProjectComponent {
     }
     // console.log(value);
     this.submitedValue.emit(value);
-    this.isModalVisible = false;
-    this.resetForm(null);
   };
 
   resetForm(e: MouseEvent): void {
     if (e) {
       e.preventDefault();
     }
-      
+
+    this.formError = {};
     this.validateForm.reset();
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsPristine();

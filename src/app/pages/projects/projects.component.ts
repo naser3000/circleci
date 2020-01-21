@@ -25,6 +25,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   addUserModalShow = false;
   addFileModalShow = false;
   addUserType = null;
+  addProjectError = {};
+  addProjectResponse = false;
   availableGroup: any = [];
   availableUser = [];
   selectedProjects = [];
@@ -48,7 +50,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   addProject(value) {
-    console.log(value);
     const data = {
       name: value.projectName,
       group: value.group,
@@ -59,10 +60,14 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     };
     this._project.addNewProject(data).subscribe(
       response => {
+        this.addProjectResponse = true;
         this.projectsList = [...this.projectsList, response];
+        setTimeout(() => {
+          this.addProjectResponse = false;
+        }, 10);
       },
       error => {
-        console.log(error);
+        this.addProjectError = error.error;
       }
     );
   }

@@ -1,7 +1,9 @@
 <div class="operate">
   <app-add-project
     *ngIf="current_user?.type === 'Admin'"
+    [formResponse]="addProjectResponse"
     [groupOptions]="availableGroup"
+    [formError]="addProjectError"
     (submitedValue)="addProject($event)">
   </app-add-project>
   <span class="actions">
