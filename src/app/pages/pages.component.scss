@@ -34,21 +34,24 @@
     line-height: 64px;
     background: #001529;
     transition: all .3s;
+    .brand-link {
+        display: flex;
+    }
 }
   
-.sidebar-logo img {
+.sidebar-logo .brand-logo {
     display: inline-block;
-    height: 32px;
-    width: 32px;
+    height: 64px;
+    width: 64px;
     vertical-align: middle;
 }
   
-.sidebar-logo h1 {
+.sidebar-logo .brand-title {
     display: inline-block;
     margin: 0 0 0 20px;
     color: #fff;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 32px;
     font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
     vertical-align: middle;
 }
