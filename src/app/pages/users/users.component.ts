@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ManagerService } from 'src/app/services/manager.service';
 import { AnnotatorService } from 'src/app/services/annotator.service';
+import { ProjectService } from 'src/app/services/project.service';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-users',
@@ -10,7 +12,9 @@ import { AnnotatorService } from 'src/app/services/annotator.service';
 export class UsersComponent implements OnInit {
 
   constructor(private _manager: ManagerService,
-    private _annotator: AnnotatorService) { }
+    private _annotator: AnnotatorService,
+    private _project: ProjectService,
+    private _group: GroupService) { }
 
   managerFields = {
     username: 'Username',
@@ -27,12 +31,16 @@ export class UsersComponent implements OnInit {
     status: 'Status',
     created_at: 'Joined'
   };
+  groupList: any = [];
+  projectsList: any = [];
   managersList: any = [];
   annotatorsList: any = [];
 
   selectedManagers = [];
   selectedAnnotators = [];
 
+  addManagerFormError = null;
+  addAnnotatorFormError = null;
   addManagerModalShow = false;
   addAnnotatorModalShow = false;
   
@@ -122,6 +130,7 @@ export class UsersComponent implements OnInit {
         first_name: value['firstName'],
         last_name: value['lastName'],
       },
+      groups: value['groups'] || [],
       invite_status: value['status'],
       company_role: value['companyRole'],
       price_per_annotation: value['price']
@@ -129,8 +138,11 @@ export class UsersComponent implements OnInit {
     this._manager.addNewManager(data).subscribe(
       response => {
         this.managersList = [...this.managersList, response];
+        this.addManagerModalShow = false;
       },
-      error => {}
+      error => {
+        this.addManagerFormError = error.error;
+      }
     );
   }
 
@@ -146,12 +158,34 @@ export class UsersComponent implements OnInit {
         first_name: value['firstName'],
         last_name: value['lastName'],
       },
+      projects: value['projects'] || [],
       invite_status: value['status'],
       company_role: value['companyRole'],
     };
     this._annotator.addNewAnnotator(data).subscribe(
       response => {
         this.annotatorsList = [...this.annotatorsList, response];
+        this.addAnnotatorModalShow = false;
+      },
+      error => {
+        this.addAnnotatorFormError = error.error;
+      }
+    );
+  }
+
+  getGroupList() {
+    this._group.getAllGroups().subscribe(
+      response => {
+        this.groupList = response;
+      },
+      error => {}
+    );
+  }
+
+  getProjectList() {
+    this._project.getAllProjects().subscribe(
+      response => {
+        this.projectsList = response;
       },
       error => {}
     );
@@ -176,6 +210,8 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getGroupList();
+    this.getProjectList();
     this.getManagerList();
     this.getAnnotatorList();
   }

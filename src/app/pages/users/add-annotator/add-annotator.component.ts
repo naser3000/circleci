@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-add-annotator',
@@ -11,43 +11,46 @@ export class AddAnnotatorComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.validateForm = this.fb.group(
       {
-        username: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
+        username: [null, [Validators.required]],
+        email: [null, [Validators.required, Validators.email]],
         password: [null, [Validators.required]],
-        confirmPassword: [null],
+        confirmPassword: [null, [this.confirmValidator]],
         firstName: [''],
         lastName: [''],
         companyRole: [''],
+        projects: [],
         status: ['A', [Validators.required]],
       },
-      {validator: this.checkPasswords}
     );
   }
   showModal = false;
-  @Output() isModalVisibleChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input() formError;
+  @Input() projectOptions = [];
   @Input() set isModalVisible(value) {
     this.showModal = value;
-    this.isModalVisibleChange.emit(value);
+    this.formError = null;
+    this.resetForm(null);
   }
   @Output() submitedValue: EventEmitter<any> = new EventEmitter();
+  @Output() isModalVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   validateForm: FormGroup;
 
-  checkPasswords(group: FormGroup) {
-    let pass = group.get('password').value;
-    let confirmPass = group.get('confirmPassword').value;
-  
-    return pass === confirmPass ? null : { notSame: true }     
-  }
+  confirmValidator = (control: FormControl): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value !== this.validateForm.controls['password'].value) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
+
   submitForm = ($event: any, value: any) => {
     $event.preventDefault();
     for (const key in this.validateForm.controls) {
       this.validateForm.controls[key].markAsDirty();
       this.validateForm.controls[key].updateValueAndValidity();
     }
-    // console.log(value);
     this.submitedValue.emit(value);
-    this.isModalVisible = false;
-    this.resetForm(null);
   };
 
   resetForm(e: MouseEvent): void {
@@ -66,7 +69,7 @@ export class AddAnnotatorComponent implements OnInit {
   }
 
   closeModal() {
-    this.isModalVisible = false;
+    this.isModalVisibleChange.emit(false);
     this.submitedValue.emit(null);
   }
 
